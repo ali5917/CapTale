@@ -5,6 +5,7 @@
 #include "headers\customCity.h"
 #include "headers\lobby.h"
 #include "headers\pongCity.h"
+#include "headers\carCity.h"
 
 using namespace std;
 
@@ -24,13 +25,14 @@ class CapTaleSystem {
         CapTaleState state;
         CustomCity customCity;
         PongCity pongCity;
+        CarCity carCity;
         Lobby lobby;
         Cap player;
 
     public:
         CapTaleSystem () {
             // state = CUSTOM_CITY;
-            state = PONG_CITY;
+            state = CAR_CITY;
         }
 
         ~CapTaleSystem () {
@@ -59,7 +61,12 @@ class CapTaleSystem {
                     state = LOBBY;
                 }
                 pongCity.update();
-                
+            } else if (state == CAR_CITY) {
+                if (IsKeyPressed(KEY_L)) {
+                    state = LOBBY;
+                }
+                float d = GetFrameTime();
+                carCity.update(d);
             }
         }
 
@@ -73,6 +80,8 @@ class CapTaleSystem {
                 lobby.draw();
             } else if (state == PONG_CITY) {
                 pongCity.draw();
+            } else if (state == CAR_CITY) {
+                carCity.draw();
             }
     
             EndDrawing();
