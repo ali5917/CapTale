@@ -16,19 +16,18 @@ class CapTaleSystem {
             CAR_CITY,
             SHOOTER_CITY,
             MATH_CITY,
-            ENERGY_CITY
+            ENERGY_CITY, 
+            BANK_CITY
         };
     
     private:
         CapTaleState state;
         CustomCity customCity;
         Lobby lobby;
-        Cap player;
+        Cap player = Cap();
 
     public:
-        CapTaleSystem () {
-            state = CUSTOM_CITY;
-        }
+        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player) {}
 
         ~CapTaleSystem () {
             CloseWindow();
@@ -46,11 +45,14 @@ class CapTaleSystem {
                 if (IsKeyPressed(KEY_RIGHT)) customCity.nextCap();
                 if (IsKeyPressed(KEY_LEFT)) customCity.prevCap();
                 if (IsKeyPressed(KEY_ENTER)) {
-                    // 
+                    Texture lobbyCapTex = LoadTexture(("assets/lobby/" + to_string(customCity.getSelectedCap()) + ".png").c_str());
+                    player.setTexture(lobbyCapTex);
+                    player.setPosition({WINDOW_WIDTH/2.0f - lobbyCapTex.width/2.0f, WINDOW_HEIGHT - lobbyCapTex.height - 20.0f});
+                    player.setSize({(float)lobbyCapTex.width, (float)lobbyCapTex.height});
                     state = LOBBY;
                 }
             } else if (state == LOBBY) {
-               
+               state = (CapTaleState)lobby.update();
             }
         }
 
@@ -73,10 +75,16 @@ class CapTaleSystem {
 
 int main () {
     SetConfigFlags(FLAG_FULLSCREEN_MODE);
-    InitWindow(screenWidth, screenHeight, "CapTale");
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "CapTale");
     SetTargetFPS(60);
 
-    CapTaleSystem game;
+    Texture2D capTex = LoadTexture("assets/cap.png");
+    Texture2D bgTex = LoadTexture("assets/lobby/bg1.png");
+
+    CapTaleSystem game(bgTex);
     game.runGame();
+
+    UnloadTexture(capTex);
+    UnloadTexture(bgTex);
     return 0;
 }
