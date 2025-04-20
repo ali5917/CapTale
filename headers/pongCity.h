@@ -218,7 +218,7 @@ class PongCity {
             ai = new AiPaddle (10, GetScreenHeight() / 2 - 60, 30, 200, 8.5);
             player = new Paddle (GetScreenWidth() - 25 - 10, GetScreenHeight() / 2 - 60, 30, 200, 8.0); 
 
-            // loading 
+            // Loading Textures
             menu = LoadTexture("assets/pongCity/menu.png");
             karachi = LoadTexture("assets/pongCity/karachi.png");
             newYork = LoadTexture("assets/pongCity/newYork.png");
@@ -308,7 +308,7 @@ class PongCity {
                     player->draw();
                     ai->draw();
                 }
-
+                
             }
 
             if (pongState == GAME_WIN) {

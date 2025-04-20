@@ -2,9 +2,6 @@
 #define CARCITY_H
 
 #include "C:\raylib\raylib\src\raylib.h"
-#include <string>
-#include <ctime>
-#include <cstdlib>
 
 // Draw text with a drop shadow for readability
 void DrawTextWithShadow(const char* text, int x, int y, int fontSize, Color mainColor, Color shadowColor = BLACK) {
