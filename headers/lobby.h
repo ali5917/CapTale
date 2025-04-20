@@ -11,11 +11,11 @@ enum RoomState {
     EMPTY,
     CUSTOMIZE,
     PONG,
+    WITHDRAW,
     CAR,
     SPACESHOOTER,
     EARN,
-    EAT,
-    WITHDRAW
+    EAT
 };
 
 class Room {

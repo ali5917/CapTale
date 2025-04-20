@@ -67,6 +67,7 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "random": "cpp",
-    "system_error": "cpp"
+    "system_error": "cpp",
+    "iostream": "cpp"
   }
 }
