@@ -4,6 +4,9 @@
 
 #include "headers\customCity.h"
 #include "headers\lobby.h"
+#include "headers\pongCity.h"
+#include "headers\carCity.h"
+#include "headers\atmCity.h"
 
 using namespace std;
 
@@ -13,6 +16,7 @@ class CapTaleSystem {
             LOBBY,
             CUSTOM_CITY, 
             PONG_CITY,
+            ATM_CITY,
             CAR_CITY,
             SHOOTER_CITY,
             MATH_CITY,
@@ -23,6 +27,9 @@ class CapTaleSystem {
     private:
         CapTaleState state;
         CustomCity customCity;
+        PongCity pongCity;
+        CarCity carCity;
+        ATMCity atmCity;
         Lobby lobby;
         Cap player = Cap();
 
@@ -52,7 +59,25 @@ class CapTaleSystem {
                     state = LOBBY;
                 }
             } else if (state == LOBBY) {
-               state = (CapTaleState)lobby.update();
+                state = (CapTaleState)lobby.update();
+            // Lobby Code
+            } else if (state == PONG_CITY) {
+                if (IsKeyPressed(KEY_L)) {
+                    state = LOBBY;
+                }
+                pongCity.update();
+            } else if (state == CAR_CITY) {
+                if (IsKeyPressed(KEY_L)) {
+                    state = LOBBY;
+                }
+                float d = GetFrameTime();
+                carCity.update(d);
+            } else if (state == ATM_CITY) {
+                if (IsKeyPressed(KEY_L)) {
+                    state = LOBBY;
+                }
+                atmCity.update();
+               
             }
         }
 
@@ -64,6 +89,12 @@ class CapTaleSystem {
                 customCity.draw();
             } else if (state == LOBBY) {
                 lobby.draw();
+            } else if (state == PONG_CITY) {
+                pongCity.draw();
+            } else if (state == CAR_CITY) {
+                carCity.draw();
+            } else if (state == ATM_CITY) {
+                atmCity.draw();
             }
     
             EndDrawing();
