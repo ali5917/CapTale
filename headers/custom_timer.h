@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <ctime> 
 #include <functional>
-#include "settings.h"
+#include "spaceShooterSettings.h"
 using namespace std;
 
 class Timer {
