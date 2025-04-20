@@ -7,7 +7,7 @@
 #include "headers\pongCity.h"
 #include "headers\carCity.h"
 #include "headers\atmCity.h"
-
+#include "headers\spaceShooter.h"
 using namespace std;
 
 class CapTaleSystem {
@@ -31,6 +31,7 @@ class CapTaleSystem {
         CarCity carCity;
         ATMCity atmCity;
         Lobby lobby;
+        SpaceShooter spaceShooter;
         Cap player = Cap();
 
     public:
@@ -78,6 +79,16 @@ class CapTaleSystem {
                 }
                 atmCity.update();
                
+            } else if (state == SHOOTER_CITY) {
+                if (IsKeyPressed(KEY_L)) {
+                    spaceShooter.restart();
+                    state = LOBBY;
+                }
+                bool val = spaceShooter.update();
+                if(val) {
+                    spaceShooter.restart();
+                    state = LOBBY;
+                }
             }
         }
 
@@ -95,6 +106,8 @@ class CapTaleSystem {
                 carCity.draw();
             } else if (state == ATM_CITY) {
                 atmCity.draw();
+            } else if (state == SHOOTER_CITY) {
+                spaceShooter.draw();
             }
     
             EndDrawing();
