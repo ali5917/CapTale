@@ -4,7 +4,7 @@
 #include "C:\raylib\raylib\src\raylib.h"
 #include "settings.h"
 
-Vector2 normalize(Vector2 v) {
+Vector2 normalized(Vector2 v) {
     if (v.x != 0 && v.y != 0) {
         if (v.x < 0) v.x = -1;
         else if (v.x > 0) v.x = 1;
@@ -32,7 +32,7 @@ class Cap {
         void input() {
             direction.x = int(IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) - int(IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
             direction.y = int(IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) - int(IsKeyDown(KEY_UP) || IsKeyDown(KEY_W));
-            direction = normalize(direction);
+            direction = normalized(direction);
         }
 
         void constraint() {
