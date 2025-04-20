@@ -11,11 +11,11 @@ enum RoomState {
     EMPTY,
     CUSTOMIZE,
     PONG,
+    WITHDRAW,
     CAR,
     SPACESHOOTER,
     EARN,
-    EAT,
-    WITHDRAW
+    EAT
 };
 
 class Room {
@@ -54,7 +54,7 @@ class Lobby {
         };
         RoomState currentState;
         string roomName[8] = {
-            "EMPTY", "CUSTOMIZE", "PONG", "CAR GAME", "SPACESHOOTER", "EARN", "EAT", "WITHDRAW"
+            "EMPTY", "CUSTOMIZE", "PONG", "WITHDRAW", "CAR GAME", "SPACESHOOTER", "EARN", "EAT"
         };
     public:
         Lobby (Cap* p) : player(p){
