@@ -30,7 +30,6 @@ class Room {
 
         void drawRoom() {
             DrawRectangleRec(rec, BLANK);
-            DrawRectangleLinesEx(rec, 2, {0, 71, 101, 255});
         }
 
         Vector2 getCenter() {
@@ -94,15 +93,16 @@ class Lobby {
             }
             player->draw();
             if(checkContains()) {
-                Font font = LoadFont("assets/fonts/Oswald-Bold.ttf");
+                int fontSize = 30;
+                Font font = LoadFontEx("assets/fonts/Oswald-Bold.ttf", fontSize, NULL, 0);
                 
                 string text = "Current City: " + roomName[currentState];
                 Vector2 textSize = MeasureTextEx(font, text.c_str(), 20, 0);
-                DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 - 15}, 20, 0, {0, 71, 101, 255});
+                DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 - 15}, fontSize, 0, {0, 71, 101, 255});
 
                 text = "Press ENTERKEY to Enter City";
                 textSize = MeasureTextEx(font, text.c_str(), 20, 0);
-                DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 + 15}, 20, 0, {0, 71, 101, 255});
+                DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 + 15}, fontSize, 0, {0, 71, 101, 255});
 
             }
         }
