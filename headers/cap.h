@@ -3,8 +3,8 @@
 
 #include "C:\raylib\raylib\src\raylib.h"
 
-const int screenWidth = 1920;
-const int screenHeight = 1080;
+int screenWidth = 1920;
+int screenHeight = 1080;
 
 class Cap {
     private:

@@ -28,7 +28,6 @@ class CapTaleSystem {
     public:
         CapTaleSystem () {
             state = CUSTOM_CITY;
-            // state = LOBBY;
         }
 
         ~CapTaleSystem () {
