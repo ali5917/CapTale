@@ -20,8 +20,7 @@ class CapTaleSystem {
             CAR_CITY,
             SHOOTER_CITY,
             MATH_CITY,
-            ENERGY_CITY, 
-            BANK_CITY
+            ENERGY_CITY
         };
     
     private:
@@ -61,7 +60,6 @@ class CapTaleSystem {
                 }
             } else if (state == LOBBY) {
                 state = (CapTaleState)lobby.update();
-            // Lobby Code
             } else if (state == PONG_CITY) {
                 if (IsKeyPressed(KEY_L)) {
                     state = LOBBY;
