@@ -3,30 +3,137 @@
 
 #include "C:\raylib\raylib\src\raylib.h"
 #include "cap.h"
+#include "settings.h"
+#include <iostream>
+using namespace std;
+
+enum RoomState {
+    EMPTY,
+    CUSTOMIZE,
+    PONG,
+    CAR,
+    SPACESHOOTER,
+    EARN,
+    EAT,
+    WITHDRAW
+};
+
+class Room {
+
+    private:
+        Vector2 pos;
+        Vector2 size;
+        Rectangle rec;
+        RoomState gameState;
+    public:
+        Room(RoomState g, Vector2 p, Vector2 s) : pos(p), size(s), rec({pos.x, pos.y, size.x, size.y}), gameState(g) {}
+
+        void drawRoom() {
+            DrawRectangleRec(rec, BLANK);
+            DrawRectangleLinesEx(rec, 2, {0, 71, 101, 255});
+        }
+
+        Vector2 getCenter() {
+            return Vector2({pos.x + size.x/2, pos.y + size.y/2});
+        }
+
+        Rectangle getRec() { return rec;}
+
+        friend class Lobby;
+
+};
 
 class Lobby {
     private:
         Texture2D background;
-        
-        Cap *player;
-        float capSpeed;
-
+        Cap* player;
+        Room* rooms[LOBBY_ROWS * LOBBY_COLS];
+        RoomState map[LOBBY_ROWS][LOBBY_COLS] {
+            { CUSTOMIZE , EMPTY , EMPTY, EMPTY, EMPTY, EMPTY, EARN},
+            { EMPTY, EMPTY, SPACESHOOTER, CAR, PONG, EMPTY, EMPTY},
+            { EAT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WITHDRAW}
+        };
+        RoomState currentState;
+        string roomName[8] = {
+            "EMPTY", "CUSTOMIZE", "PONG", "CAR GAME", "SPACESHOOTER", "EARN", "EAT", "WITHDRAW"
+        };
     public:
-        Lobby () {
-            capSpeed = 4.0f;
-            player = nullptr;
-
+        Lobby (Cap* p) : player(p){
             background = LoadTexture("assets/lobby/bg1.png");
+
+            for (int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
+                rooms[i] = nullptr;
+            }
+
+            float height = WINDOW_HEIGHT/LOBBY_ROWS;
+            float width = WINDOW_WIDTH/LOBBY_COLS;
+            
+            Vector2 currentPos = {0,0};
+            for(int i = 0; i < LOBBY_ROWS; i++) {
+                currentPos.y = height * i;
+                for(int j = 0; j < LOBBY_COLS; j++) {
+                    currentPos.x = width * j;
+                    rooms[i * LOBBY_COLS + j] = new Room(map[i][j], currentPos, {width,height});
+                }
+            }
+
+            currentState = EMPTY;
+            
         }
         
         ~Lobby () {
-
+            // for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
+            //     delete rooms[i];
+            // }
         }
 
         void draw () {
             DrawTexture(background, 0, 0, WHITE);
+            for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
+                rooms[i]->drawRoom();
+            }
+            player->draw();
+            if(checkContains()) {
+                Font font = LoadFont("assets/fonts/Oswald-Bold.ttf");
+                
+                string text = "Current City: " + roomName[currentState];
+                Vector2 textSize = MeasureTextEx(font, text.c_str(), 20, 0);
+                DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 - 15}, 20, 0, {0, 71, 101, 255});
 
+                text = "Press ENTERKEY to Enter City";
+                textSize = MeasureTextEx(font, text.c_str(), 20, 0);
+                DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 + 15}, 20, 0, {0, 71, 101, 255});
+
+            }
         }
+        
+        bool CheckRectangleContainsRec(Rectangle outer, Rectangle inner) {
+            return (inner.x >= outer.x && inner.y >= outer.y && inner.x + inner.width <= outer.x + outer.width && inner.y + inner.height <= outer.y + outer.height);
+        }
+        
+        bool checkContains() {
+            Rectangle playerRec = player->getRectangle();
+            for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
+                if (rooms[i]->gameState != EMPTY &&
+                    CheckRectangleContainsRec(rooms[i]->getRec(), playerRec)) {
+                    currentState = rooms[i]->gameState;
+                    return true;
+                }
+            }
+            currentState = EMPTY;
+            return false;
+        }
+
+        int update() {
+            float dt = GetFrameTime();
+            player->update(dt);
+            if(currentState != EMPTY && IsKeyPressed(KEY_ENTER)) {
+                return currentState;
+            } else {
+                return EMPTY;
+            }
+        }
+
 };
 
 #endif

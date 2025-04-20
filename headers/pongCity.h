@@ -2,6 +2,7 @@
 #define PONGCITY_H
 
 #include "C:\raylib\raylib\src\raylib.h"
+#include "settings.h"
 
 int aiScore = 0, playerScore = 0;
 int gameLevel = 1; // 1 = Karachi, 2 = New York, 3 = Rome
@@ -268,15 +269,15 @@ class PongCity {
                 } else {
                     if (gameLevel == 1) {
                         DrawTexture(karachi, 0, 0, WHITE);
-                        DrawText("KARACHI", screenWidth / 2 - 160, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", aiScore), screenWidth / 5 - 20, 20, 80, BLACK);
-                        DrawText( TextFormat("%i", playerScore), 4 * screenWidth / 5 - 20, 20, 80, BLACK);
+                        DrawText("KARACHI", WINDOW_WIDTH / 2 - 160, 20, 80, BLACK);
+                        DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                        DrawText( TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
     
                     } else if (gameLevel == 2) {
                         DrawTexture(newYork, 0, 0, WHITE); 
-                        DrawText("NEW YORK", screenWidth / 2 - 200, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", aiScore), screenWidth / 5 - 20, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", playerScore), 4 * screenWidth / 5 - 20, 20, 80, BLACK);
+                        DrawText("NEW YORK", WINDOW_WIDTH / 2 - 200, 20, 80, BLACK);
+                        DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                        DrawText(TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
                         
                         // increasing speed of objects
                         static bool speedSet = false;
@@ -290,9 +291,9 @@ class PongCity {
     
                     } else if (gameLevel == 3) {
                         DrawTexture(rome, 0, 0, WHITE); 
-                        DrawText("ROME", screenWidth / 2 - 120, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", aiScore), screenWidth / 5 - 20, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", playerScore), 4 * screenWidth / 5 - 20, 20, 80, BLACK);
+                        DrawText("ROME", WINDOW_WIDTH / 2 - 120, 20, 80, BLACK);
+                        DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                        DrawText(TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
                         
                         // increasing speed of objects
                         static bool speedSet = false;
