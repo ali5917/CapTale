@@ -73,7 +73,6 @@ class CapTaleSystem {
 
 
 int main () {
-
     SetConfigFlags(FLAG_FULLSCREEN_MODE);
     InitWindow(screenWidth, screenHeight, "CapTale");
     SetTargetFPS(60);
