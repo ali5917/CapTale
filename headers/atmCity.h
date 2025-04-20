@@ -3,6 +3,7 @@
 
 #include "C:\raylib\raylib\src\raylib.h"
 #include "cap.h"
+#include "settings.h"
 
 class ATMCity {
     private:
@@ -46,12 +47,12 @@ class ATMCity {
 
             if (atmState == BALANCE) {
                 DrawTexture (balance, 0, 0, WHITE);
-                DrawText(TextFormat("%i", atmBalance), screenWidth / 2 - 20, screenHeight / 2 - 100, 300, DARKBROWN);
+                DrawText(TextFormat("%i", atmBalance), WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 100, 300, DARKBROWN);
             }
 
             if (atmState == WITHDRAW){
                 DrawTexture (withdraw, 0, 0, WHITE);
-                DrawText(TextFormat("%i", tokensCount), screenWidth / 2 - 20, screenHeight / 2 - 150, 300, DARKBROWN);
+                DrawText(TextFormat("%i", tokensCount), WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 150, 300, DARKBROWN);
             }
         }
 
