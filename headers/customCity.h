@@ -6,7 +6,7 @@
 
 class CustomCity {
     private:
-        Cap capsList[4];
+        Texture capsList[4];
         int capsCount;
         int selectedIndex;
         Texture2D background;
@@ -17,27 +17,27 @@ class CustomCity {
             capsCount = 4;
             background = LoadTexture("assets/customCity/bg1.png");
 
-            capsList[0] = Cap ("assets/customCity/cap0.png");
-            capsList[1] = Cap ("assets/customCity/cap1.png");
-            capsList[2] = Cap ("assets/customCity/cap2.png");
-            capsList[3] = Cap ("assets/customCity/cap3.png");
+            capsList[0] = LoadTexture("assets/customCity/cap0.png");
+            capsList[1] = LoadTexture("assets/customCity/cap1.png");
+            capsList[2] = LoadTexture("assets/customCity/cap2.png");
+            capsList[3] = LoadTexture("assets/customCity/cap3.png");
         }
 
         ~CustomCity () {
             UnloadTexture(background);
             
             for (int i = 0; i < capsCount; i++) {
-                capsList[i].unload();
+                UnloadTexture(capsList[i]);
             }
         }
 
         void draw () {
             DrawTexture(background, 0, 0, WHITE);
-            capsList[selectedIndex].draw(screenWidth / 2, screenHeight / 2);
+            DrawTexture(capsList[selectedIndex],WINDOW_WIDTH/2 - capsList[selectedIndex].width/2, WINDOW_HEIGHT/2 - capsList[selectedIndex].height/2, WHITE);
         }
 
-        Cap getSelectedCap () {
-            return capsList[selectedIndex];
+        int getSelectedCap () {
+            return selectedIndex;
         }
 
         void nextCap () {
