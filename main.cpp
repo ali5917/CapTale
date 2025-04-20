@@ -28,7 +28,7 @@ class CapTaleSystem {
     public:
         CapTaleSystem () {
             state = CUSTOM_CITY;
-
+            // state = LOBBY;
         }
 
         ~CapTaleSystem () {
@@ -73,6 +73,8 @@ class CapTaleSystem {
 
 
 int main () {
+
+    SetConfigFlags(FLAG_FULLSCREEN_MODE);
     InitWindow(screenWidth, screenHeight, "CapTale");
     SetTargetFPS(60);
 
