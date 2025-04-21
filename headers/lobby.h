@@ -77,7 +77,9 @@ class Lobby {
             }
 
             currentState = EMPTY;
-            
+
+            // int fontSize = 30;
+            // Font font = LoadFontEx("assets/fonts/Oswald-Bold.ttf", 30, NULL, 0);
         }
         
         ~Lobby () {
@@ -93,16 +95,16 @@ class Lobby {
             }
             player->draw();
             if(checkContains()) {
-                int fontSize = 30;
-                Font font = LoadFontEx("assets/fonts/Oswald-Bold.ttf", fontSize, NULL, 0);
+                // int fontSize = 30;
+                // Font font = LoadFontEx("assets/fonts/Oswald-Bold.ttf", fontSize, NULL, 0);
                 
-                string text = "Current City: " + roomName[currentState];
-                Vector2 textSize = MeasureTextEx(font, text.c_str(), 20, 0);
-                DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 - 15}, fontSize, 0, {0, 71, 101, 255});
+                // string text = "Current City: " + roomName[currentState];
+                // Vector2 textSize = MeasureTextEx(font, text.c_str(), 20, 0);
+                // DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 - 15}, fontSize, 0, {0, 71, 101, 255});
 
-                text = "Press ENTERKEY to Enter City";
-                textSize = MeasureTextEx(font, text.c_str(), 20, 0);
-                DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 + 15}, fontSize, 0, {0, 71, 101, 255});
+                // text = "Press ENTERKEY to Enter City";
+                // textSize = MeasureTextEx(font, text.c_str(), 20, 0);
+                // DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 + 15}, fontSize, 0, {0, 71, 101, 255});
 
             }
         }
