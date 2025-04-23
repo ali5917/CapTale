@@ -298,9 +298,9 @@ class PongCity {
                         // increasing speed of objects
                         static bool speedSet = false;
                         if (!speedSet) {
-                            ball->setSpeedX(20.0);
-                            ball->setSpeedY(18.0);
-                            ai->setSpeed(14);
+                            ball->setSpeedX(26.0);
+                            ball->setSpeedY(20.0);
+                            ai->setSpeed(20);
                             player->setSpeed(12);
                             speedSet = true;
                         }
