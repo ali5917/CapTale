@@ -34,7 +34,8 @@ class CapTaleSystem {
         Cap player = Cap();
 
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player) {}
+        // CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player) {}
+        CapTaleSystem (Texture2D bgTex) : state(PONG_CITY), lobby(&player) {}
 
         ~CapTaleSystem () {
             CloseWindow();

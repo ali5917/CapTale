@@ -138,17 +138,17 @@ class Paddle {
         }
 
         void update () {
-            if (IsKeyDown(KEY_UP)) {
-                y -= speed;
-            }
+            // if (IsKeyDown(KEY_UP)) {
+            //     y -= speed;
+            // }
 
-            if (IsKeyDown(KEY_DOWN)) {
-                y += speed;
-            }
+            // if (IsKeyDown(KEY_DOWN)) {
+            //     y += speed;
+            // }
 
-            // Limiting Vertical Movement
-            if (y <= 0) y = 0;
-            if ((y + height) >= GetScreenHeight()) y = GetScreenHeight() - height;
+            // // Limiting Vertical Movement
+            // if (y <= 0) y = 0;
+            // if ((y + height) >= GetScreenHeight()) y = GetScreenHeight() - height;
         }
         
         
@@ -187,6 +187,46 @@ class AiPaddle : public Paddle {
         }
 };
 
+class player1Paddle : public Paddle {
+    public:
+        player1Paddle (float x, float y, float w, float h, float s) : Paddle (x, y, w, h, s) {}
+
+        void update () {
+            if (IsKeyDown(KEY_W)) {
+                y -= speed;
+            }
+
+            if (IsKeyDown(KEY_S)) {
+                y += speed;
+            }
+
+            // Limiting Vertical Movement
+            if (y <= 0) y = 0;
+            if ((y + height) >= GetScreenHeight()) y = GetScreenHeight() - height;
+        }
+};
+
+class player2Paddle : public Paddle {
+    public:
+        player2Paddle (float x, float y, float w, float h, float s) : Paddle (x, y, w, h, s) {}
+
+        void update () {
+            if (IsKeyDown(KEY_UP)) {
+                y -= speed;
+            }
+
+            if (IsKeyDown(KEY_DOWN)) {
+                y += speed;
+            }
+
+            // Limiting Vertical Movement
+            if (y <= 0) y = 0;
+            if ((y + height) >= GetScreenHeight()) y = GetScreenHeight() - height;
+        }
+};
+
+
+
 class PongCity {
     public:
         enum PongState {
@@ -197,8 +237,10 @@ class PongCity {
         };
 
         Ball *ball;
-        Paddle *player;
-        AiPaddle *ai;
+        player1Paddle *player1;
+        player2Paddle *player2;
+        // Paddle *player;
+        // AiPaddle *ai;
         bool isPaused;
         
         Texture2D menu;
@@ -215,9 +257,13 @@ class PongCity {
             pongState = GAME_MENU;
             isPaused = false;
 
-            ball = new Ball (GetScreenWidth() / 2, GetScreenHeight() / 2, 20.0, 12.0, 12.0);
-            ai = new AiPaddle (10, GetScreenHeight() / 2 - 60, 30, 200, 8.5);
-            player = new Paddle (GetScreenWidth() - 25 - 10, GetScreenHeight() / 2 - 60, 30, 200, 8.0); 
+            // ball = new Ball (GetScreenWidth() / 2, GetScreenHeight() / 2, 20.0, 12.0, 12.0);
+            // ai = new AiPaddle (10, GetScreenHeight() / 2 - 60, 30, 200, 8.5);
+            // player = new Paddle (GetScreenWidth() - 25 - 10, GetScreenHeight() / 2 - 60, 30, 200, 8.0); 
+            
+            ball = new Ball (GetScreenWidth() / 2, GetScreenHeight() / 2, 20.0, 20.0, 20.0);
+            player1 = new player1Paddle(10, GetScreenHeight() / 2 - 60, 30, 200, 20.0);
+            player2 = new player2Paddle(GetScreenWidth() - 25 - 10, GetScreenHeight() / 2 - 60, 30, 200, 20.0);
 
             // Loading Textures
             menu = LoadTexture("assets/pongCity/menu.png");
@@ -233,8 +279,10 @@ class PongCity {
         ~PongCity () {
             unloadTextures();
             delete ball; 
-            delete ai; 
-            delete player;
+            delete player1;
+            delete player2;
+            // delete ai; 
+            // delete player;
         }
 
         void unloadTextures () {
@@ -282,10 +330,10 @@ class PongCity {
                         // increasing speed of objects
                         static bool speedSet = false;
                         if (!speedSet) {
-                            ball->setSpeedX(15.0);
-                            ball->setSpeedY(15.0);
-                            ai->setSpeed(12);
-                            player->setSpeed(10);
+                            ball->setSpeedX(18.0);
+                            ball->setSpeedY(18.0);
+                            // ai->setSpeed(15);
+                            // player->setSpeed(10);
                             speedSet = true;
                         }
     
@@ -300,14 +348,16 @@ class PongCity {
                         if (!speedSet) {
                             ball->setSpeedX(26.0);
                             ball->setSpeedY(20.0);
-                            ai->setSpeed(20);
-                            player->setSpeed(12);
+                            // ai->setSpeed(20);
+                            // player->setSpeed(12);
                             speedSet = true;
                         }
                     }                
                     ball->draw();
-                    player->draw();
-                    ai->draw();
+                    player1->draw();
+                    player2->draw();
+                    // player->draw();
+                    // ai->draw();
                 }
                 
             }
@@ -343,15 +393,19 @@ class PongCity {
                 if (IsKeyPressed(KEY_P)) isPaused = !isPaused;
 
                 ball->update();
-                player->update();
-                ai->update(ball->getY());
+                player1->update();
+                player2->update();
+                // player->update();
+                // ai->update(ball->getY());
 
                 // Checking For Paddle - Ball Hits
-                if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player->getX(), player->getY(), player->getWidth(), player->getHeight()})) {
+                // if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player->getX(), player->getY(), player->getWidth(), player->getHeight()})) {
+                if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player2->getX(), player2->getY(), player2->getWidth(), player2->getHeight()})) {
                     ball->InvertSpeedX();
                 }
 
-                if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {ai->getX(), ai->getY(), ai->getWidth(), ai->getHeight()})) {
+                // if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {ai->getX(), ai->getY(), ai->getWidth(), ai->getHeight()})) {
+                if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player1->getX(), player1->getY(), player1->getWidth(), player1->getHeight()})) {
                     ball->InvertSpeedX();
                 }
 
