@@ -10,6 +10,40 @@
 #include "headers\spaceShooter.h"
 using namespace std;
 
+void playIntroAnimation() {
+    const int totalFrames = 253; // Number of frames you exported
+    Texture2D frames[totalFrames];
+
+    SetTargetFPS(0);
+
+    // Load all frames
+    for (int i = 0; i < totalFrames; i++) {
+        char filename[64];
+        sprintf(filename, "assets/intro/frames/intro_frame_%04d.png", i + 1);
+        frames[i] = LoadTexture(filename);
+    }
+
+    // Show each frame for 1/30th of a second
+    for (int i = 0; i < totalFrames; i++) {
+        BeginDrawing();
+        ClearBackground(WHITE);
+        float posX = (WINDOW_WIDTH - frames[i].width) / 2.0f;
+        float posY = (WINDOW_HEIGHT - frames[i].height) / 2.0f;
+        DrawTexture(frames[i], posX, posY, WHITE);
+        EndDrawing();
+        WaitTime(1.0f / 30.0f); // 30 FPS
+    }
+
+    // Unload textures
+    for (int i = 0; i < totalFrames; i++) {
+        UnloadTexture(frames[i]);
+    }
+
+    SetTargetFPS(60); 
+
+    return;
+}
+
 class CapTaleSystem {
     public:
         enum CapTaleState {
@@ -121,7 +155,6 @@ class CapTaleSystem {
             } else if (state == SHOOTER_CITY) {
                 spaceShooter.draw();
             }
-    
             EndDrawing();
         }
     
@@ -133,6 +166,8 @@ int main () {
     SetConfigFlags(FLAG_FULLSCREEN_MODE);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "CapTale");
     SetTargetFPS(60);
+
+    playIntroAnimation(); 
 
     Texture2D capTex = LoadTexture("assets/cap.png");
     Texture2D bgTex = LoadTexture("assets/lobby/bg1.png");
