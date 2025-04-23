@@ -276,6 +276,7 @@ class PongCity {
         Texture2D win;
         Texture2D lose;
         Texture2D pause;
+        Texture2D humanPause;
 
         PongState pongState;
         enemyState enemyState;
@@ -301,6 +302,7 @@ class PongCity {
             win = LoadTexture("assets/pongCity/win.png");
             lose = LoadTexture("assets/pongCity/lose.png");
             pause = LoadTexture("assets/pongCity/pause.png");
+            humanPause = LoadTexture("assets/pongCity/human-pause.png");
         }  
 
         ~PongCity () {
@@ -321,6 +323,7 @@ class PongCity {
             UnloadTexture(win);
             UnloadTexture(lose);
             UnloadTexture(pause);
+            UnloadTexture(humanPause);
         }
 
         void draw () {
@@ -332,15 +335,20 @@ class PongCity {
                 DrawTexture(menu, 0, 0, WHITE);
             }
 
-            if (pongState == GAME_PLAYING) {
+            if (pongState == GAME_PLAYING) {               
                 if (isPaused) {
-                    DrawTexture (pause, 0, 0, WHITE);
+                    if (enemyState == AI) {
+                        DrawTexture (pause, 0, 0, WHITE);
+                        if (IsKeyPressed(KEY_M)) {
+                            pongState = GAME_MENU;
+                            isPaused = false;
+                        }
+                    } else {
+                        DrawTexture (humanPause, 0, 0, WHITE);
+                    }
+
                     if (IsKeyPressed(KEY_X)) {
                         isPaused = !isPaused;
-                    }
-                    if (IsKeyPressed(KEY_M)) {
-                        pongState = GAME_MENU;
-                        isPaused = false;
                     }
                     if (IsKeyPressed(KEY_R)) {
                         aiScore = 0;
@@ -349,6 +357,9 @@ class PongCity {
                         player2Score = 0;
                         isPaused = false;
                     }
+
+
+
                 } else {
                     if (enemyState == HUMAN) {
                         DrawTexture(humanBg, 0, 0, WHITE);
