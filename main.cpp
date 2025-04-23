@@ -36,7 +36,7 @@ class CapTaleSystem {
         bool enterPong;
 
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player), enterPong(false) {}
+        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), enterPong(false) {}
 
         ~CapTaleSystem () {
             CloseWindow();
