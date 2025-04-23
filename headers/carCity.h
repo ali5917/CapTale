@@ -67,12 +67,20 @@ public:
 
 class Coin {
 public:
-    static constexpr float COIN_SIZE = 31.5f; 
+    // static constexpr float COIN_SIZE = 31.5f; 
+    static constexpr float COIN_SIZE = 40.0f; 
 
     Rectangle rect;
     bool active;
+    Texture2D coinTexture;
 
-    Coin(): active(false) {}
+    Coin(): active(false) {
+        coinTexture = LoadTexture("assets/carCity/coin.png");
+    }
+
+    ~Coin () {
+        UnloadTexture(coinTexture);
+    }
 
     void Spawn() {
         rect.x      = (float)GetRandomValue(0, GetScreenWidth() - (int)COIN_SIZE);
@@ -90,11 +98,18 @@ public:
 
     void Draw() const {
         if (!active) return;
-        DrawCircle(
-            (int)(rect.x + COIN_SIZE / 2),
-            (int)(rect.y + COIN_SIZE / 2),
-            COIN_SIZE / 2,  
-            GOLD
+        // DrawCircle(
+        //     (int)(rect.x + COIN_SIZE / 2),
+        //     (int)(rect.y + COIN_SIZE / 2),
+        //     COIN_SIZE / 2,  
+        //     GOLD
+        // );
+        DrawTextureEx(
+            coinTexture,
+            { rect.x, rect.y },
+            0.0f,
+            COIN_SIZE / coinTexture.width, // scaling to COIN_SIZE
+            WHITE
         );
     }
 };
@@ -182,7 +197,7 @@ class CarCity {
 
 public:
     CarCity() {
-        car    = new Car("assets/carCity/car.png");
+        car    = new Car("assets/carCity/car1.png");
         bg     = new Background("assets/carCity/background.png");
         banana = LoadTexture("assets/carCity/cycle.png");
         tree   = LoadTexture("assets/carCity/truck.png");
