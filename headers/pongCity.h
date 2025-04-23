@@ -5,7 +5,8 @@
 #include "settings.h"
 
 int aiScore = 0, playerScore = 0;
-int gameLevel = 1; // 1 = Karachi, 2 = New York, 3 = Rome
+int player1Score = 0, player2Score = 0;
+int gameLevel = -1; // 1 = Karachi, 2 = New York, 3 = Rome, -1 = DEFAULT
 float ballSpeed;
 float aiSpeed;
 float playerSpeed;
@@ -15,9 +16,11 @@ Color ballColor;
 Color paddleColor;
 Color cBrown = {109, 65, 42, 255};
 Color cGreen = {81, 116, 95, 255};
+Color defaultBall = BLACK;
 Color karachiBall = {60, 24, 24, 255};
 Color newYorkBall = {106, 101, 0, 255};
 Color romeBall = WHITE;
+Color defaultPaddle = WHITE;
 Color karachiPaddle = {255, 174, 11, 255};
 Color newYorkPaddle = {81, 116, 95, 255};
 Color romePaddle = {199, 60, 0, 255};
@@ -47,6 +50,8 @@ class Ball {
                 ballColor = newYorkBall;
             } else if (gameLevel == 3) {
                 ballColor = romeBall;
+            } else {
+                ballColor = defaultBall;
             }
             DrawCircle(x, y, radius, ballColor);
         }
@@ -60,12 +65,20 @@ class Ball {
             }
 
             if ((x + radius) >= GetScreenWidth()) {
-                aiScore ++;
+                if (gameLevel == -1) {
+                    player1Score++;
+                } else {
+                    aiScore ++;
+                }
                 resetBall();
             }
             
             if ((x - radius) <= 0) {
-                playerScore ++;
+                if (gameLevel == -1) {
+                    player2Score++;
+                } else {
+                    playerScore++;
+                }
                 resetBall();
             }
         }
@@ -130,27 +143,32 @@ class Paddle {
                 paddleColor = newYorkPaddle;
             } else if (gameLevel == 3) {
                 paddleColor = romePaddle;
+            } else {
+                paddleColor = defaultPaddle;
             }
             
             float borderThickness = 3.0f;
-            DrawRectangleRounded(Rectangle{x - borderThickness, y - borderThickness, width + 2 * borderThickness, height + 2 * borderThickness}, 0.8, 0, WHITE);
+            Color borderColor;
+            if (gameLevel == -1) borderColor = BLACK;
+            else borderColor = WHITE;
+
+            DrawRectangleRounded(Rectangle{x - borderThickness, y - borderThickness, width + 2 * borderThickness, height + 2 * borderThickness}, 0.8, 0, borderColor);
             DrawRectangleRounded(Rectangle{x, y, width, height}, 0.8, 0, paddleColor);
         }
 
         void update () {
-            // if (IsKeyDown(KEY_UP)) {
-            //     y -= speed;
-            // }
+            if (IsKeyDown(KEY_UP)) {
+                y -= speed;
+            }
 
-            // if (IsKeyDown(KEY_DOWN)) {
-            //     y += speed;
-            // }
+            if (IsKeyDown(KEY_DOWN)) {
+                y += speed;
+            }
 
-            // // Limiting Vertical Movement
-            // if (y <= 0) y = 0;
-            // if ((y + height) >= GetScreenHeight()) y = GetScreenHeight() - height;
-        }
-        
+            // Limiting Vertical Movement
+            if (y <= 0) y = 0;
+            if ((y + height) >= GetScreenHeight()) y = GetScreenHeight() - height;
+        }        
         
         float getY () {
             return y;
@@ -230,20 +248,28 @@ class player2Paddle : public Paddle {
 class PongCity {
     public:
         enum PongState {
+            GAME_ENEMY,
             GAME_MENU,
             GAME_PLAYING,
             GAME_WIN,
             GAME_LOSE
         };
-
+        
+        enum enemyState {
+            AI,
+            HUMAN
+        };
+        
         Ball *ball;
+        Paddle *player;
+        AiPaddle *ai;
         player1Paddle *player1;
         player2Paddle *player2;
-        // Paddle *player;
-        // AiPaddle *ai;
         bool isPaused;
         
+        Texture2D enemyMenu;
         Texture2D menu;
+        Texture2D humanBg;
         Texture2D karachi;
         Texture2D newYork;
         Texture2D rome;
@@ -252,28 +278,29 @@ class PongCity {
         Texture2D pause;
 
         PongState pongState;
+        enemyState enemyState;
 
         PongCity () {
-            pongState = GAME_MENU;
+            pongState = GAME_ENEMY;
             isPaused = false;
 
-            // ball = new Ball (GetScreenWidth() / 2, GetScreenHeight() / 2, 20.0, 12.0, 12.0);
-            // ai = new AiPaddle (10, GetScreenHeight() / 2 - 60, 30, 200, 8.5);
-            // player = new Paddle (GetScreenWidth() - 25 - 10, GetScreenHeight() / 2 - 60, 30, 200, 8.0); 
+            ball = new Ball (GetScreenWidth() / 2, GetScreenHeight() / 2, 20.0, 12.0, 12.0);
+            ai = new AiPaddle (10, GetScreenHeight() / 2 - 60, 30, 200, 8.5);
+            player = new Paddle (GetScreenWidth() - 30 - 10, GetScreenHeight() / 2 - 60, 30, 200, 8.0); 
             
-            ball = new Ball (GetScreenWidth() / 2, GetScreenHeight() / 2, 20.0, 20.0, 20.0);
             player1 = new player1Paddle(10, GetScreenHeight() / 2 - 60, 30, 200, 20.0);
-            player2 = new player2Paddle(GetScreenWidth() - 25 - 10, GetScreenHeight() / 2 - 60, 30, 200, 20.0);
+            player2 = new player2Paddle(GetScreenWidth() - 30 - 10, GetScreenHeight() / 2 - 60, 30, 200, 20.0);
 
             // Loading Textures
             menu = LoadTexture("assets/pongCity/menu.png");
+            enemyMenu = LoadTexture("assets/pongCity/enemy-menu.png");
+            humanBg = LoadTexture("assets/pongCity/human-bg.png");
             karachi = LoadTexture("assets/pongCity/karachi.png");
             newYork = LoadTexture("assets/pongCity/newYork.png");
             rome = LoadTexture("assets/pongCity/rome.png");
             win = LoadTexture("assets/pongCity/win.png");
             lose = LoadTexture("assets/pongCity/lose.png");
             pause = LoadTexture("assets/pongCity/pause.png");
-
         }  
 
         ~PongCity () {
@@ -281,12 +308,14 @@ class PongCity {
             delete ball; 
             delete player1;
             delete player2;
-            // delete ai; 
-            // delete player;
+            delete ai; 
+            delete player;
         }
 
         void unloadTextures () {
             UnloadTexture(menu);
+            UnloadTexture(enemyMenu);
+            UnloadTexture(humanBg);
             UnloadTexture(karachi);
             UnloadTexture(newYork);
             UnloadTexture(win);
@@ -295,6 +324,10 @@ class PongCity {
         }
 
         void draw () {
+            if (pongState == GAME_ENEMY) {
+                DrawTexture(enemyMenu, 0, 0, WHITE);
+            }
+
             if (pongState == GAME_MENU) {
                 DrawTexture(menu, 0, 0, WHITE);
             }
@@ -312,54 +345,70 @@ class PongCity {
                     if (IsKeyPressed(KEY_R)) {
                         aiScore = 0;
                         playerScore = 0;
+                        player1Score = 0;
+                        player2Score = 0;
                         isPaused = false;
                     }
                 } else {
-                    if (gameLevel == 1) {
-                        DrawTexture(karachi, 0, 0, WHITE);
-                        DrawText("KARACHI", WINDOW_WIDTH / 2 - 160, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
-                        DrawText( TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
-    
-                    } else if (gameLevel == 2) {
-                        DrawTexture(newYork, 0, 0, WHITE); 
-                        DrawText("NEW YORK", WINDOW_WIDTH / 2 - 200, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
-                        
-                        // increasing speed of objects
+                    if (enemyState == HUMAN) {
+                        DrawTexture(humanBg, 0, 0, WHITE);
+                        DrawText(TextFormat("%i", player1Score), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                        DrawText(TextFormat("%i", player2Score), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+
                         static bool speedSet = false;
                         if (!speedSet) {
-                            ball->setSpeedX(18.0);
-                            ball->setSpeedY(18.0);
-                            // ai->setSpeed(15);
-                            // player->setSpeed(10);
-                            speedSet = true;
-                        }
-    
-                    } else if (gameLevel == 3) {
-                        DrawTexture(rome, 0, 0, WHITE); 
-                        DrawText("ROME", WINDOW_WIDTH / 2 - 120, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
-                        DrawText(TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
-                        
-                        // increasing speed of objects
-                        static bool speedSet = false;
-                        if (!speedSet) {
-                            ball->setSpeedX(26.0);
+                            ball->setSpeedX(20.0);
                             ball->setSpeedY(20.0);
-                            // ai->setSpeed(20);
-                            // player->setSpeed(12);
                             speedSet = true;
                         }
-                    }                
+
+                        player1->draw();
+                        player2->draw();
+
+                    } else if (enemyState == AI) {
+                        if (gameLevel == 1) {
+                            DrawTexture(karachi, 0, 0, WHITE);
+                            DrawText("KARACHI", WINDOW_WIDTH / 2 - 160, 20, 80, BLACK);
+                            DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                            DrawText(TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+        
+                        } else if (gameLevel == 2) {
+                            DrawTexture(newYork, 0, 0, WHITE); 
+                            DrawText("NEW YORK", WINDOW_WIDTH / 2 - 200, 20, 80, BLACK);
+                            DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                            DrawText(TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                            
+                            // increasing speed of objects
+                            static bool speedSet = false;
+                            if (!speedSet) {
+                                ball->setSpeedX(18.0);
+                                ball->setSpeedY(18.0);
+                                ai->setSpeed(15);
+                                player->setSpeed(10);
+                                speedSet = true;
+                            }
+        
+                        } else if (gameLevel == 3) {
+                            DrawTexture(rome, 0, 0, WHITE); 
+                            DrawText("ROME", WINDOW_WIDTH / 2 - 120, 20, 80, BLACK);
+                            DrawText(TextFormat("%i", aiScore), WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                            DrawText(TextFormat("%i", playerScore), 4 * WINDOW_WIDTH / 5 - 20, 20, 80, BLACK);
+                            
+                            // increasing speed of objects
+                            static bool speedSet = false;
+                            if (!speedSet) {
+                                ball->setSpeedX(26.0);
+                                ball->setSpeedY(20.0);
+                                ai->setSpeed(20);
+                                player->setSpeed(12);
+                                speedSet = true;
+                            }
+                        }    
+                        player->draw();
+                        ai->draw();
+                    }            
                     ball->draw();
-                    player1->draw();
-                    player2->draw();
-                    // player->draw();
-                    // ai->draw();
                 }
-                
             }
 
             if (pongState == GAME_WIN) {
@@ -372,6 +421,11 @@ class PongCity {
         }
 
         void update () {
+            if (pongState == GAME_ENEMY) {
+                gameLevel = -1;
+                enemyUpdate();
+            }
+
             if (pongState == GAME_MENU) {
                 if (IsKeyPressed(KEY_K)) {
                     gameLevel = 1;
@@ -385,29 +439,44 @@ class PongCity {
                     gameLevel = 3;
                     pongState = GAME_PLAYING;
                 }
+
                 aiScore = 0;
                 playerScore = 0;
+                player1Score = 0;
+                player2Score = 0;
             }
 
             if (pongState == GAME_PLAYING && !isPaused) {
                 if (IsKeyPressed(KEY_P)) isPaused = !isPaused;
 
+                if (enemyState == HUMAN) {
+                    player1->update();
+                    player2->update();
+                    
+                    // Checking For Paddle - Ball Hits
+                    if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player2->getX(), player2->getY(), player2->getWidth(), player2->getHeight()})) {
+                        ball->InvertSpeedX();
+                    }
+
+                    if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player1->getX(), player1->getY(), player1->getWidth(), player1->getHeight()})) {
+                        ball->InvertSpeedX();
+                    }
+                } 
+
+                if (enemyState == AI) {
+                    ai->update(ball->getY());
+                    player->update();
+
+                    if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player->getX(), player->getY(), player->getWidth(), player->getHeight()})) {
+                        ball->InvertSpeedX();
+                    }
+
+                    if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {ai->getX(), ai->getY(), ai->getWidth(), ai->getHeight()})) {
+                        ball->InvertSpeedX();
+                    }
+                }
+
                 ball->update();
-                player1->update();
-                player2->update();
-                // player->update();
-                // ai->update(ball->getY());
-
-                // Checking For Paddle - Ball Hits
-                // if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player->getX(), player->getY(), player->getWidth(), player->getHeight()})) {
-                if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player2->getX(), player2->getY(), player2->getWidth(), player2->getHeight()})) {
-                    ball->InvertSpeedX();
-                }
-
-                // if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {ai->getX(), ai->getY(), ai->getWidth(), ai->getHeight()})) {
-                if (CheckCollisionCircleRec({ball->getX(), ball->getY()}, ball->getRadius(), {player1->getX(), player1->getY(), player1->getWidth(), player1->getHeight()})) {
-                    ball->InvertSpeedX();
-                }
 
                 // winning conditions
                 if (gameLevel == 1) {
@@ -438,6 +507,45 @@ class PongCity {
                 if (IsKeyPressed(KEY_R)) pongState = GAME_PLAYING;
             }
         }
+
+        void enemyUpdate () {
+            int rows = 7;
+            int cols = 7;
+            int cellWidth = GetScreenWidth() / cols;
+            int cellHeight = GetScreenHeight() / rows;
+
+            // AI Rectangle Dimensions
+            Rectangle aiRect = {
+                (float)(1 * cellWidth), 
+                (float)(2 * cellHeight), 
+                (float)(2 * cellWidth), 
+                (float)(3 * cellHeight)
+            };
+
+            // Human Rectangle Dimensions 
+            Rectangle humanRect = {               
+                (float)(4 * cellWidth), 
+                (float)(2 * cellHeight), 
+                (float)(2 * cellWidth), 
+                (float)(3 * cellHeight)
+            };
+
+            // Checking for Mouse Clicks
+
+            if (CheckCollisionPointRec(GetMousePosition(), aiRect)) {
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    enemyState = AI;
+                    pongState = GAME_MENU;
+                }
+            }
+
+            if (CheckCollisionPointRec(GetMousePosition(), humanRect)) {
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    enemyState = HUMAN;
+                    pongState = GAME_PLAYING;
+                }
+            }
+        }   
 };
 
 #endif
