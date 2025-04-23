@@ -33,8 +33,11 @@ class CapTaleSystem {
         SpaceShooter spaceShooter;
         Cap player = Cap();
 
+        bool enterPong;
+
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player) {}
+        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player), enterPong(false) {}
+        // CapTaleSystem (Texture2D bgTex) : state(LOBBY), lobby(&player) {}
 
         ~CapTaleSystem () {
             CloseWindow();
@@ -63,8 +66,19 @@ class CapTaleSystem {
             } else if (state == PONG_CITY) {
                 if (IsKeyPressed(KEY_L)) {
                     state = LOBBY;
+                    enterPong = false;
                 }
+
+                if (!enterPong) {
+                    enterPong = true;
+                    pongCity.isPaused = false;
+                    pongCity.pongState = PongCity::GAME_ENEMY;
+                    
+                }
+
                 pongCity.update();
+                
+
             } else if (state == CAR_CITY) {
                 if (IsKeyPressed(KEY_L)) {
                     state = LOBBY;

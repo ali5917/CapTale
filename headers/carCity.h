@@ -184,8 +184,8 @@ public:
     CarCity() {
         car    = new Car("assets/carCity/car.png");
         bg     = new Background("assets/carCity/background.png");
-        banana = LoadTexture("assets/carCity/banana.png");
-        tree   = LoadTexture("assets/carCity/tree.png");
+        banana = LoadTexture("assets/carCity/cycle.png");
+        tree   = LoadTexture("assets/carCity/truck.png");
         pRed   = LoadTexture("assets/carCity/power_red.png");
         pBlue  = LoadTexture("assets/carCity/power_blue.png");
         pGreen = LoadTexture("assets/carCity/power_green.png");
