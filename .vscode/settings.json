@@ -68,6 +68,8 @@
   "files.associations": {
     "random": "cpp",
     "system_error": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "memory": "cpp",
+    "optional": "cpp"
   }
 }

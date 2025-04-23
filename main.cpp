@@ -38,7 +38,8 @@ class CapTaleSystem {
         bool enterPong;
 
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player), enterPong(false) {}
+        // CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player), enterPong(false) {}
+        CapTaleSystem (Texture2D bgTex) : state(ENERGY_CITY), lobby(&player), enterPong(false) {}
 
         ~CapTaleSystem () {
             CloseWindow();
@@ -140,6 +141,8 @@ int main () {
     SetConfigFlags(FLAG_FULLSCREEN_MODE);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "CapTale");
     SetTargetFPS(60);
+
+    srand(time(nullptr));
 
     Texture2D capTex = LoadTexture("assets/cap.png");
     Texture2D bgTex = LoadTexture("assets/lobby/bg1.png");
