@@ -335,6 +335,8 @@ class PongCity {
                     gameLevel = 3;
                     pongState = GAME_PLAYING;
                 }
+                aiScore = 0;
+                playerScore = 0;
             }
 
             if (pongState == GAME_PLAYING && !isPaused) {
