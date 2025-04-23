@@ -77,7 +77,9 @@ class Lobby {
             }
 
             currentState = EMPTY;
-            
+
+            // int fontSize = 30;
+            // Font font = LoadFontEx("assets/fonts/Oswald-Bold.ttf", 30, NULL, 0);
         }
         
         ~Lobby () {
