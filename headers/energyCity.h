@@ -92,11 +92,12 @@ class Basket {
 class EnergyCity {
     private:
         Texture2D background;
-        int numFruits = 5;
+        int numFruits = 6;
         Fruit *fruits;
         Basket *basket;
         float spawnTimer = 0.0f;
         int currentFruit = 0;
+        float energyCount;
 
     public:
         EnergyCity () {
@@ -104,7 +105,8 @@ class EnergyCity {
 
             fruits = new Fruit [numFruits];
             for (int i = 0; i < numFruits; i++) {
-                fruits[i].initialize("assets/energyCity/apple.png", 5.0f);
+                string path = "assets/energyCity/fruit" + to_string(i+1) +  ".png";
+                fruits[i].initialize(path.c_str(), 5.0f);
             }
 
             basket = new Basket("assets/energyCity/basket.png", {600.0f, GetScreenHeight() - 154.0f - 10.0f}, 10.0f);
