@@ -40,7 +40,7 @@ class CapTaleSystem {
         bool enterPong;
 
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), earnCity(&player), enterPong(false) {}
+        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), earnCity(&player), energyCity(&player), enterPong(false) {}
 
         ~CapTaleSystem () {
             CloseWindow();
@@ -140,7 +140,7 @@ class CapTaleSystem {
                 energyCity.draw();
             }
             EndDrawing();
-            
+
         }    
 };
 

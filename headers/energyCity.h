@@ -91,6 +91,7 @@ class Basket {
 
 class EnergyCity {
     private:
+        Cap *player;
         Texture2D background;
         int numFruits = 6;
         Fruit *fruits;
@@ -100,7 +101,7 @@ class EnergyCity {
         float energyCount;
 
     public:
-        EnergyCity () {
+        EnergyCity (Cap *p) : player(p) {
             background = LoadTexture("assets/energyCity/bg1.png");
 
             fruits = new Fruit [numFruits];
@@ -143,6 +144,7 @@ class EnergyCity {
             for (int i = 0; i < numFruits; i++) {
                 if (fruits[i].checkCollision(basket->getRect())) {
                     fruits[i].spawn();
+                    player->increaseEnergy();
                 }
                 fruits[i].update();
             }

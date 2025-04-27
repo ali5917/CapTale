@@ -109,11 +109,16 @@ class Cap {
             cash -= amount;
         }
 
-        void increaseEnergy(int amount) {
-            energy += amount;
+        void increaseEnergy() {
+            if (energy < MAX_ENERGY) {
+                energy += 10;
+            }
         }
-        void decreaseEnergy(int amount) {
-            energy -= amount;
+
+        void decreaseEnergy() {
+            if (energy > MIN_ENERGY) {
+                energy -= 10;
+            }
         }
 
         int getCash() { return cash; }

@@ -19,5 +19,8 @@
 #define CAR_TOKENS 5
 #define PONG_TOKENS 8
 
+#define MAX_ENERGY 100
+#define MIN_ENERGY 0
+
 #endif
 
