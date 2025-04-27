@@ -94,7 +94,6 @@ class Lobby {
         }
 
         void draw () {
-
             DrawTexture(background, 0, 0, WHITE);
             DrawTexture(menuIcon, GetScreenWidth() - menuIcon.width - 20, GetScreenHeight() / 2 - menuIcon.height / 2, WHITE);
 

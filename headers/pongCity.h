@@ -520,6 +520,11 @@ class PongCity {
         }
 
         void enemyUpdate () {
+            player1Score = 0;
+            player2Score = 0;
+            playerScore = 0;
+            aiScore = 0;
+            
             int rows = 7;
             int cols = 7;
             int cellWidth = GetScreenWidth() / cols;
