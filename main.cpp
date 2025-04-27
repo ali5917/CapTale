@@ -8,6 +8,7 @@
 #include "headers\carCity.h"
 #include "headers\atmCity.h"
 #include "headers\spaceShooter.h"
+#include "headers\earningCity.h"
 using namespace std;
 
 class CapTaleSystem {
@@ -19,7 +20,7 @@ class CapTaleSystem {
             ATM_CITY,
             CAR_CITY,
             SHOOTER_CITY,
-            MATH_CITY,
+            EARN_CITY,
             ENERGY_CITY
         };
     
@@ -31,12 +32,13 @@ class CapTaleSystem {
         ATMCity atmCity;
         Lobby lobby;
         SpaceShooter spaceShooter;
+        EarnCity earnCity;
         Cap player = Cap();
 
         bool enterPong;
 
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), enterPong(false) {}
+        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), earnCity(&player), enterPong(false) {}
 
         ~CapTaleSystem () {
             CloseWindow();
@@ -100,6 +102,12 @@ class CapTaleSystem {
                     spaceShooter.restart();
                     state = LOBBY;
                 }
+            } else if(state == EARN_CITY) {
+                if(IsKeyPressed(KEY_L)) {
+                    earnCity.reset();
+                    state = LOBBY;
+                }
+                earnCity.update();
             }
         }
 
@@ -119,6 +127,8 @@ class CapTaleSystem {
                 atmCity.draw();
             } else if (state == SHOOTER_CITY) {
                 spaceShooter.draw();
+            } else if (state == EARN_CITY) {
+                earnCity.draw();
             }
             EndDrawing();
         }
