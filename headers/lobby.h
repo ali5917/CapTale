@@ -56,6 +56,7 @@ class Lobby {
             "EMPTY", "CUSTOMIZE", "PONG", "WITHDRAW", "CAR GAME", "SPACESHOOTER", "EARN", "EAT"
         };
         Font font = LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0);
+    
     public:
         Lobby (Cap* p) : player(p){
             background = LoadTexture("assets/lobby/background.png");

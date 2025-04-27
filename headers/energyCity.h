@@ -2,6 +2,7 @@
 #define ENERGYCITY_H
 
 #include "C:\raylib\raylib\src\raylib.h"
+#include "settings.h"
 #include <cstdlib>
 
 class Fruit {
@@ -100,6 +101,8 @@ class EnergyCity {
         int currentFruit = 0;
         float energyCount;
 
+        Font font = LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0);
+
     public:
         EnergyCity (Cap *p) : player(p) {
             background = LoadTexture("assets/energyCity/bg1.png");
@@ -125,6 +128,10 @@ class EnergyCity {
                 fruits[i].draw();
             }
             basket->draw();
+            
+            string text = "Consumable Energy: " + to_string(player->getEnergy());
+            Vector2 textSize = MeasureTextEx(font, text.c_str(), TOKEN_FONT_SIZE, 0);
+            DrawTextEx(font, (text).c_str(), {WINDOW_WIDTH/2 - textSize.x/2, 100 - textSize.y}, TOKEN_FONT_SIZE, 0, TEXT_COLOR);
         }
 
         void update () {
@@ -144,7 +151,7 @@ class EnergyCity {
             for (int i = 0; i < numFruits; i++) {
                 if (fruits[i].checkCollision(basket->getRect())) {
                     fruits[i].spawn();
-                    player->increaseEnergy(5);
+                    player->increaseEnergy(2);
                 }
                 fruits[i].update();
             }
