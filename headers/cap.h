@@ -26,6 +26,7 @@ class Cap {
         float collisionRadius;
         int tokens;
         int cash;
+        int energy;
     public:
         Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false), tokens(0), cash(INITIAL_CASH) {
             collisionRadius = size.y/2;
@@ -108,8 +109,17 @@ class Cap {
             cash -= amount;
         }
 
+        void increaseEnergy(int amount) {
+            energy += amount;
+        }
+        void decreaseEnergy(int amount) {
+            energy -= amount;
+        }
+
         int getCash() { return cash; }
         int getTokens() { return tokens; }
+        int getEnergy() { return energy; }
+        
         friend class ATMCity;
         friend class Lobby;
 };
