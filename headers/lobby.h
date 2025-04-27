@@ -58,7 +58,7 @@ class Lobby {
         Font font = LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0);
     public:
         Lobby (Cap* p) : player(p){
-            background = LoadTexture("assets/lobby/bg1.png");
+            background = LoadTexture("assets/lobby/background.png");
 
             for (int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
                 rooms[i] = nullptr;
@@ -92,9 +92,13 @@ class Lobby {
 
             DrawTexture(background, 0, 0, WHITE);
 
-            string text = "Available Tokens: " + to_string(player->getEnergy());
+            string text = "Available Tokens: " + to_string(player->getTokens());
             Vector2 textSize = MeasureTextEx(font, text.c_str(), TOKEN_FONT_SIZE, 0);
             DrawTextEx(font, (text).c_str(), {WINDOW_WIDTH/2 - textSize.x/2, 100 - textSize.y/2}, TOKEN_FONT_SIZE, 0, TEXT_COLOR);
+
+            string text2 = "Consumable Energy: " + to_string(player->getEnergy()) + "%";
+            Vector2 text2Size = MeasureTextEx(font, text2.c_str(), TOKEN_FONT_SIZE, 0);
+            DrawTextEx(font, (text2).c_str(), {WINDOW_WIDTH/2 - text2Size.x/2, 120 + textSize.y - text2Size.y/2}, TOKEN_FONT_SIZE, 0, TEXT_COLOR);
 
             for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
                 rooms[i]->drawRoom();
