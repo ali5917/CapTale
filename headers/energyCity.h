@@ -75,7 +75,7 @@ class Basket {
                 position.x -= speed;
             }
 
-            if (IsKeyDown(KEY_RIGHT) && position.x < GetScreenWidth()) {
+            if (IsKeyDown(KEY_RIGHT) && position.x < GetScreenWidth() - basketTexture.width) {
                 position.x += speed;
             }
         }
