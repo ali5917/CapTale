@@ -18,12 +18,12 @@ enum RoomState {
 };
 
 class Room {
-
     private:
         Vector2 pos;
         Vector2 size;
         Rectangle rec;
         RoomState gameState;
+
     public:
         Room(RoomState g, Vector2 p, Vector2 s) : pos(p), size(s), rec({pos.x, pos.y, size.x, size.y}), gameState(g) {}
 
@@ -44,6 +44,7 @@ class Room {
 class Lobby {
     private:
         Texture2D background;
+        Texture2D menuIcon;
         Cap* player;
         Room* rooms[LOBBY_ROWS * LOBBY_COLS];
         RoomState map[LOBBY_ROWS][LOBBY_COLS] {
@@ -60,6 +61,7 @@ class Lobby {
     public:
         Lobby (Cap* p) : player(p){
             background = LoadTexture("assets/lobby/background.png");
+            menuIcon = LoadTexture("assets/lobby/menu.png");
 
             for (int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
                 rooms[i] = nullptr;

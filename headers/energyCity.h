@@ -155,7 +155,6 @@ class EnergyCity {
                 }
                 fruits[i].update();
             }
-
             basket->update();
         }
 };
