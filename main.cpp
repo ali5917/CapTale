@@ -39,12 +39,16 @@ class CapTaleSystem {
         Cap player = Cap();
 
         bool enterPong;
+        Texture2D gameOver;
 
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), earnCity(&player), energyCity(&player), enterPong(false) {}
+        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), earnCity(&player), energyCity(&player), enterPong(false) {
+            gameOver = LoadTexture("assets/gameOver/game-over.png");
+        }
 
         ~CapTaleSystem () {
             CloseWindow();
+            UnloadTexture(gameOver);
         }
 
         void runGame () {
@@ -73,7 +77,7 @@ class CapTaleSystem {
                 }
                 
                 if (player.getGameOver()) {
-
+                    state = GAME_OVER;
                 }
 
             } else if (state == PONG_CITY) {
@@ -88,8 +92,7 @@ class CapTaleSystem {
                     pongCity.pongState = PongCity::GAME_ENEMY;
                     
                 }
-                pongCity.update();
-                
+                pongCity.update();         
 
             } else if (state == CAR_CITY) {
                 if (IsKeyPressed(KEY_L)) {
@@ -147,7 +150,9 @@ class CapTaleSystem {
                 earnCity.draw();
             } else if (state == ENERGY_CITY) {
                 energyCity.draw();
-            } 
+            } else if (state == GAME_OVER) {
+                DrawTexture(gameOver, 0, 0, WHITE);
+            }
             EndDrawing();
 
         }    
