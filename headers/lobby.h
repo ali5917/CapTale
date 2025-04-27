@@ -89,6 +89,8 @@ class Lobby {
             // for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
             //     delete rooms[i];
             // }
+            UnloadTexture(background);
+            UnloadTexture(menuIcon);
         }
 
         void draw () {
