@@ -8,6 +8,7 @@
 #include "headers\carCity.h"
 #include "headers\atmCity.h"
 #include "headers\spaceShooter.h"
+#include "headers\earningCity.h"
 #include "headers\energyCity.h"
 using namespace std;
 
@@ -20,7 +21,7 @@ class CapTaleSystem {
             ATM_CITY,
             CAR_CITY,
             SHOOTER_CITY,
-            MATH_CITY,
+            EARN_CITY,
             ENERGY_CITY
         };
     
@@ -30,16 +31,16 @@ class CapTaleSystem {
         PongCity pongCity;
         CarCity carCity;
         ATMCity atmCity;
-        EnergyCity energyCity;
         Lobby lobby;
         SpaceShooter spaceShooter;
+        EarnCity earnCity;
+        EnergyCity energyCity;
         Cap player = Cap();
 
         bool enterPong;
 
     public:
-        // CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), lobby(&player), enterPong(false) {}
-        CapTaleSystem (Texture2D bgTex) : state(ENERGY_CITY), lobby(&player), enterPong(false) {}
+        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), earnCity(&player), enterPong(false) {}
 
         ~CapTaleSystem () {
             CloseWindow();
@@ -103,6 +104,12 @@ class CapTaleSystem {
                     spaceShooter.restart();
                     state = LOBBY;
                 }
+            } else if(state == EARN_CITY) {
+                if(IsKeyPressed(KEY_L)) {
+                    earnCity.reset();
+                    state = LOBBY;
+                }
+                earnCity.update();
             } else if (state == ENERGY_CITY) {
                 if (IsKeyPressed(KEY_L)) {
                     state = LOBBY;
@@ -127,12 +134,14 @@ class CapTaleSystem {
                 atmCity.draw();
             } else if (state == SHOOTER_CITY) {
                 spaceShooter.draw();
+            } else if (state == EARN_CITY) {
+                earnCity.draw();
             } else if (state == ENERGY_CITY) {
                 energyCity.draw();
             }
             EndDrawing();
-        }
-    
+            
+        }    
 };
 
 
@@ -141,8 +150,6 @@ int main () {
     SetConfigFlags(FLAG_FULLSCREEN_MODE);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "CapTale");
     SetTargetFPS(60);
-
-    srand(time(nullptr));
 
     Texture2D capTex = LoadTexture("assets/cap.png");
     Texture2D bgTex = LoadTexture("assets/lobby/bg1.png");

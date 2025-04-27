@@ -2,14 +2,11 @@
 #define ATMCITY_H
 
 #include "C:\raylib\raylib\src\raylib.h"
-#include "cap.h"
 #include "settings.h"
 
 class ATMCity {
     private:
-        int atmBalance;
-        int tokensCount;
-
+        Cap* player;
     public:
         enum ATMState {
             MACHINE,
@@ -23,10 +20,7 @@ class ATMCity {
 
         ATMState atmState;
 
-        ATMCity () {
-            atmBalance = 1000; // initial balance
-            tokensCount = 0;
-            atmState = MACHINE;
+        ATMCity (Cap* p) : player(p), atmState(MACHINE) {
 
             // Loading Textures
             machine = LoadTexture("assets/atmCity/machine.png");        
@@ -47,12 +41,12 @@ class ATMCity {
 
             if (atmState == BALANCE) {
                 DrawTexture (balance, 0, 0, WHITE);
-                DrawText(TextFormat("%i", atmBalance), WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 100, 300, DARKBROWN);
+                DrawText(TextFormat("%i", player->cash), WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 100, 300, DARKBROWN);
             }
 
             if (atmState == WITHDRAW){
                 DrawTexture (withdraw, 0, 0, WHITE);
-                DrawText(TextFormat("%i", tokensCount), WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 150, 300, DARKBROWN);
+                DrawText(TextFormat("%i", player->tokens), WINDOW_WIDTH / 2 - 20, WINDOW_HEIGHT / 2 - 150, 300, DARKBROWN);
             }
         }
 
@@ -73,8 +67,8 @@ class ATMCity {
             }
 
             if (atmState == WITHDRAW){
-                tokensCount += (atmBalance / 50);
-                atmBalance = 0;
+                player->tokens += (player->cash / 50);
+                player->cash = 0;
 
                 if (IsKeyPressed(KEY_R)) {
                     atmState = MACHINE;
@@ -82,21 +76,21 @@ class ATMCity {
             }
         }
 
-        void setBalance (int b) {
-            atmBalance = b;
-        }
+        // void setBalance (int b) {
+        //     player->cash = b;
+        // }
 
-        void setTokensCount (int t) {
-            tokensCount = t;
-        }
+        // void setTokensCount (int t) {
+        //     player->tokens = t;
+        // }
 
-        int getBalance () {
-            return atmBalance; 
-        }
+        // int getBalance () {
+        //     return player->cash; 
+        // }
 
-        int getTokensCount () {
-            return tokensCount; 
-        }
+        // int getTokensCount () {
+        //     return player->tokens; 
+        // }
 };
 
 #endif

@@ -2,7 +2,6 @@
 #define LOBBY_H
 
 #include "C:\raylib\raylib\src\raylib.h"
-#include "cap.h"
 #include "settings.h"
 #include <iostream>
 using namespace std;
@@ -56,6 +55,7 @@ class Lobby {
         string roomName[8] = {
             "EMPTY", "CUSTOMIZE", "PONG", "WITHDRAW", "CAR GAME", "SPACESHOOTER", "EARN", "EAT"
         };
+        Font font = LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0);
     public:
         Lobby (Cap* p) : player(p){
             background = LoadTexture("assets/lobby/bg1.png");
@@ -89,7 +89,13 @@ class Lobby {
         }
 
         void draw () {
+
             DrawTexture(background, 0, 0, WHITE);
+
+            string text = "Available Tokens: " + to_string(player->getTokens());
+            Vector2 textSize = MeasureTextEx(font, text.c_str(), TOKEN_FONT_SIZE, 0);
+            DrawTextEx(font, (text).c_str(), {WINDOW_WIDTH/2 - textSize.x/2, 100 - textSize.y/2}, TOKEN_FONT_SIZE, 0, TEXT_COLOR);
+
             for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
                 rooms[i]->drawRoom();
             }
@@ -116,8 +122,9 @@ class Lobby {
         bool checkContains() {
             Rectangle playerRec = player->getRectangle();
             for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
-                if (rooms[i]->gameState != EMPTY &&
-                    CheckRectangleContainsRec(rooms[i]->getRec(), playerRec)) {
+                if (rooms[i]->gameState != EMPTY &&CheckRectangleContainsRec(rooms[i]->getRec(), playerRec)) {
+
+                    
                     currentState = rooms[i]->gameState;
                     return true;
                 }
@@ -130,10 +137,39 @@ class Lobby {
             float dt = GetFrameTime();
             player->update(dt);
             if(currentState != EMPTY && IsKeyPressed(KEY_ENTER)) {
-                return currentState;
-            } else {
-                return EMPTY;
-            }
+
+                bool changeState = true;
+                switch (currentState) {
+                    case SPACESHOOTER:
+                        if(player->getTokens() >= SPACESHOOTER_TOKENS) {
+                            player->removeTokens(SPACESHOOTER_TOKENS);
+                        } else {
+                            changeState = false;
+                        }
+                        break;
+                    case PONG:
+                        if(player->getTokens() >= PONG_TOKENS) {
+                            player->removeTokens(PONG_TOKENS);
+                        } else {
+                            changeState = false;
+                        }
+                        break;
+                    case CAR:
+                        if(player->getTokens() >= CAR_TOKENS) {
+                            player->removeTokens(CAR_TOKENS);
+                        } else {
+                            changeState = false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if(changeState) {
+                    return currentState;
+                }
+            } 
+            return EMPTY;
         }
 
 };

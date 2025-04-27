@@ -8,4 +8,16 @@
 #define LOBBY_ROWS 3
 #define LOBBY_COLS 7
 
+#define INITIAL_CASH 1000
+#define TEXT_COLOR {0, 71, 101, 255}
+#define TOKEN_FONT_SIZE 35
+
+#define EARN_FONT_SIZE 150
+#define EARN_WHITE {255, 254, 235, 255}
+
+#define SPACESHOOTER_TOKENS 10
+#define CAR_TOKENS 5
+#define PONG_TOKENS 8
+
 #endif
+

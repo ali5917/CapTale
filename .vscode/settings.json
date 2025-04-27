@@ -69,7 +69,11 @@
     "random": "cpp",
     "system_error": "cpp",
     "iostream": "cpp",
+<<<<<<< HEAD
     "memory": "cpp",
     "optional": "cpp"
+=======
+    "string": "cpp"
+>>>>>>> 267870d1306128d2328653a1c54618d1468d7bf0
   }
 }

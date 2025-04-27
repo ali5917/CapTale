@@ -24,8 +24,10 @@ class Cap {
         Vector2 size;
         bool discard;
         float collisionRadius;
+        int tokens;
+        int cash;
     public:
-        Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false) {
+        Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false), tokens(0), cash(INITIAL_CASH) {
             collisionRadius = size.y/2;
         }
 
@@ -91,6 +93,25 @@ class Cap {
         Rectangle getRectangle() {
             return {pos.x,pos.y, size.x, size.y};
         }
+
+        void addTokens(int amount) {
+            tokens += amount;
+        }
+        void removeTokens(int amount) {
+            tokens -= amount;
+        }
+
+        void addCash(int amount) {
+            cash += amount;
+        }
+        void removeCash(int amount) {
+            cash -= amount;
+        }
+
+        int getCash() { return cash; }
+        int getTokens() { return tokens; }
+        friend class ATMCity;
+        friend class Lobby;
 };
 
 #endif
