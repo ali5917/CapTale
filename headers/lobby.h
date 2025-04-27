@@ -92,7 +92,7 @@ class Lobby {
 
             DrawTexture(background, 0, 0, WHITE);
 
-            string text = "Available Tokens: " + to_string(player->getTokens());
+            string text = "Available Tokens: " + to_string(player->getEnergy());
             Vector2 textSize = MeasureTextEx(font, text.c_str(), TOKEN_FONT_SIZE, 0);
             DrawTextEx(font, (text).c_str(), {WINDOW_WIDTH/2 - textSize.x/2, 100 - textSize.y/2}, TOKEN_FONT_SIZE, 0, TEXT_COLOR);
 

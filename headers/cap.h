@@ -27,8 +27,10 @@ class Cap {
         int tokens;
         int cash;
         int energy;
+        bool gameOver;
+        
     public:
-        Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false), tokens(0), cash(INITIAL_CASH) {
+        Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false), tokens(0), cash(INITIAL_CASH), energy(100), gameOver(false) {
             collisionRadius = size.y/2;
         }
 
@@ -49,8 +51,12 @@ class Cap {
         ~Cap() {}
 
         void move(double dt) {
-            pos.x += direction.x * speed * dt;
-            pos.y += direction.y * speed * dt;
+            if (energy > MIN_ENERGY){
+                pos.x += direction.x * speed * dt;
+                pos.y += direction.y * speed * dt;
+            } else {
+                gameOver = true;
+            };
         }
 
         void update(double dt) {
@@ -109,21 +115,30 @@ class Cap {
             cash -= amount;
         }
 
-        void increaseEnergy() {
-            if (energy < MAX_ENERGY) {
-                energy += 10;
+        void increaseEnergy(int amount) {
+            if ((energy + amount) < MAX_ENERGY) {
+                energy += amount;
+            } else {
+                energy = MAX_ENERGY;
             }
         }
 
-        void decreaseEnergy() {
-            if (energy > MIN_ENERGY) {
-                energy -= 10;
+        void decreaseEnergy(int amount) {
+            if ((energy - amount) > MIN_ENERGY) {
+                energy -= amount;
+            } else {
+                energy = MIN_ENERGY;
             }
+        }
+
+        void drawDead () {
+
         }
 
         int getCash() { return cash; }
         int getTokens() { return tokens; }
         int getEnergy() { return energy; }
+        bool getGameOver() { return gameOver; }
         
         friend class ATMCity;
         friend class Lobby;

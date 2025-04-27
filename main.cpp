@@ -22,7 +22,8 @@ class CapTaleSystem {
             CAR_CITY,
             SHOOTER_CITY,
             EARN_CITY,
-            ENERGY_CITY
+            ENERGY_CITY,
+            GAME_OVER
         };
     
     private:
@@ -66,6 +67,15 @@ class CapTaleSystem {
                 }
             } else if (state == LOBBY) {
                 state = (CapTaleState)lobby.update();
+                // Energy drainage
+                if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_UP)) {
+                    player.decreaseEnergy(2);
+                }
+                
+                if (player.getGameOver()) {
+
+                }
+
             } else if (state == PONG_CITY) {
                 if (IsKeyPressed(KEY_L)) {
                     state = LOBBY;
@@ -78,7 +88,6 @@ class CapTaleSystem {
                     pongCity.pongState = PongCity::GAME_ENEMY;
                     
                 }
-
                 pongCity.update();
                 
 
@@ -138,7 +147,7 @@ class CapTaleSystem {
                 earnCity.draw();
             } else if (state == ENERGY_CITY) {
                 energyCity.draw();
-            }
+            } 
             EndDrawing();
 
         }    

@@ -144,7 +144,7 @@ class EnergyCity {
             for (int i = 0; i < numFruits; i++) {
                 if (fruits[i].checkCollision(basket->getRect())) {
                     fruits[i].spawn();
-                    player->increaseEnergy();
+                    player->increaseEnergy(5);
                 }
                 fruits[i].update();
             }
