@@ -70,8 +70,7 @@ class CapTaleSystem {
             gameManual = LoadTexture("assets/gameManual/game-manual.png");
             bool success = loadData();
             if(success) {
-                // state = LOBBY;
-                state = ENERGY_CITY;
+                state = LOBBY;
             } else {
                 state = CUSTOM_CITY;
             }
@@ -259,7 +258,6 @@ class CapTaleSystem {
             }
             messages.draw();
             EndDrawing();
-
         }    
 };
 
