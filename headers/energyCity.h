@@ -124,14 +124,23 @@ class EnergyCity {
 
         void draw () {
             DrawTexture(background, 0, 0, WHITE);
+
+            float barWidth = 300;
+            float barHeight = 25;
+            float energyPercent = player->getEnergy() / 100.0f;
+            float x = WINDOW_WIDTH / 2 - barWidth / 2;
+            float y = 90;
+            string label = "Consumable Energy";
+            Vector2 labelSize = MeasureTextEx(font, label.c_str(), TOKEN_FONT_SIZE/1.25, 0);
+            DrawTextEx(font, label.c_str(), {WINDOW_WIDTH / 2 - labelSize.x / 2, y - TOKEN_FONT_SIZE / 2 - 20}, TOKEN_FONT_SIZE/1.25, 0, Color{0x00, 0x47, 0x65, 255});
+            DrawRectangleRounded({x, y, barWidth, barHeight}, 0.5f, 10, Color{200, 220, 230, 255});
+            DrawRectangleRounded({x, y, barWidth * energyPercent, barHeight}, 0.5f, 10, Color{0x00, 0x47, 0x65, 255});
+
             for (int i = 0; i < numFruits; i++) {
                 fruits[i].draw();
             }
             basket->draw();
-            
-            string text = "Consumable Energy: " + to_string(player->getEnergy());
-            Vector2 textSize = MeasureTextEx(font, text.c_str(), TOKEN_FONT_SIZE, 0);
-            DrawTextEx(font, (text).c_str(), {WINDOW_WIDTH/2 - textSize.x/2, 100 - textSize.y}, TOKEN_FONT_SIZE, 0, TEXT_COLOR);
+
         }
 
         void update () {
