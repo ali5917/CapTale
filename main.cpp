@@ -44,6 +44,7 @@ class CapTaleSystem {
             SPACE_CITY,
             EARN_CITY,
             ENERGY_CITY,
+            GAME_MANUAL,
             GAME_OVER
         };
     
@@ -60,11 +61,13 @@ class CapTaleSystem {
         SpaceShooter spaceShooter;
         EarnCity earnCity;
         EnergyCity energyCity;
-        bool enterPong;
         Texture2D gameOver;
+        Texture2D gameManual;
+        bool enterPong;
     public:
         CapTaleSystem (Texture2D bgTex) : player(new Cap()), messagesFont(LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0)), messages(messagesFont), atmCity(player, &messages), lobby(player, &messages), earnCity(player), energyCity(player), enterPong(false) {
             gameOver = LoadTexture("assets/gameOver/game-over.png");
+            gameManual = LoadTexture("assets/gameManual/game-manual.png");
             bool success = loadData();
             if(success) {
                 // state = LOBBY;
@@ -220,6 +223,11 @@ class CapTaleSystem {
                     state = LOBBY;
                 }
                 energyCity.update();
+            } else if (state == GAME_MANUAL) {
+                if (IsKeyPressed(KEY_L)) {
+                    state = LOBBY;
+                }
+                
             }
             messages.update();
         }
@@ -246,6 +254,8 @@ class CapTaleSystem {
                 energyCity.draw();
             } else if (state == GAME_OVER) {
                 DrawTexture(gameOver, 0, 0, WHITE);
+            } else if (state == GAME_MANUAL) {
+                DrawTexture(gameManual, 0, 0, WHITE);
             }
             messages.draw();
             EndDrawing();

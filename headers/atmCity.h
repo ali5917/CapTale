@@ -80,22 +80,6 @@ class ATMCity {
                 }
             }
         }
-
-        // void setBalance (int b) {
-        //     player->cash = b;
-        // }
-
-        // void setTokensCount (int t) {
-        //     player->tokens = t;
-        // }
-
-        // int getBalance () {
-        //     return player->cash; 
-        // }
-
-        // int getTokensCount () {
-        //     return player->tokens; 
-        // }
 };
 
 #endif

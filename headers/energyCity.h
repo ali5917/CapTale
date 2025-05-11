@@ -144,12 +144,10 @@ class EnergyCity {
                 items[i].draw();
             }
             basket->draw();
-
         }
 
         void update () {
             spawnTimer += GetFrameTime();
-            
             if (spawnTimer >= 1.0f) {
                 spawnTimer = 0.0f;
             
@@ -160,7 +158,6 @@ class EnergyCity {
                     }
                 }
             }
-            
             
             for (int i = 0; i < numItems; i++) {
                 if (items[i].checkCollision(basket->getRect())) {

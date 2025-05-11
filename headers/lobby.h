@@ -15,7 +15,8 @@ enum RoomState {
     CAR,
     SPACESHOOTER,
     EARN,
-    EAT
+    EAT,
+    MANUAL
 };
 
 class Room {
@@ -83,15 +84,9 @@ class Lobby {
             }
 
             currentState = EMPTY;
-
-            // int fontSize = 30;
-            // Font font = LoadFontEx("assets/fonts/Oswald-Bold.ttf", 30, NULL, 0);
         }
         
         ~Lobby () {
-            // for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
-            //     delete rooms[i];
-            // }
             UnloadTexture(background);
             UnloadTexture(menuIcon);
         }
@@ -148,6 +143,18 @@ class Lobby {
                 messages->addMessage("You're low on energy! Eat some fruit.");
                 energyWarning = true;
             }
+
+            // Checking for menu pressed     
+            int menuX = GetScreenWidth() - menuIcon.width - 20;
+            int menuY = GetScreenHeight() / 2 - menuIcon.height / 2;       
+            Rectangle menuRect = {(float)menuX, (float)menuY, (float)menuIcon.width, (float)menuIcon.height};
+
+            if (CheckCollisionPointRec(GetMousePosition(), menuRect)) {
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    return MANUAL;
+                }
+            }
+
             if(currentState != EMPTY && IsKeyPressed(KEY_ENTER)) {
                 bool changeState = true;
                 switch (currentState) {
