@@ -95,7 +95,10 @@ class Lobby {
 
         void draw () {
             DrawTexture(background, 0, 0, WHITE);
-            DrawTexture(menuIcon, GetScreenWidth() - menuIcon.width - 20, GetScreenHeight() / 2 - menuIcon.height / 2, WHITE);
+
+            int menuX = GetScreenWidth() - menuIcon.width - 20;
+            int menuY = GetScreenHeight() / 2 - menuIcon.height / 2;
+            DrawTexture(menuIcon, menuX, menuY, WHITE);
 
             string text = "Available Tokens: " + to_string(player->getTokens());
             Vector2 textSize = MeasureTextEx(font, text.c_str(), TOKEN_FONT_SIZE, 0);
@@ -121,6 +124,14 @@ class Lobby {
                 // textSize = MeasureTextEx(font, text.c_str(), 20, 0);
                 // DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 + 15}, fontSize, 0, {0, 71, 101, 255});
 
+            }
+
+            Rectangle menuRect = { (float)menuX, (float)menuY, (float)menuIcon.width, (float)menuIcon.height };
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                Vector2 mousePos = GetMousePosition();
+                if (CheckCollisionPointRec(mousePos, menuRect)) {
+                    // Event
+                }
             }
         }
         
