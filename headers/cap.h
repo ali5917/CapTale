@@ -143,10 +143,6 @@ class Cap {
             }
         }
 
-        void drawDead () {
-
-        }
-
         int getCash() { return cash; }
         int getTokens() { return tokens; }
         int getEnergy() { return energy; }
