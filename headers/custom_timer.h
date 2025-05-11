@@ -1,3 +1,6 @@
+#ifndef CUSTOM_TIMER_H
+#define CUSTOM_TIMER_H
+
 #include "C:\raylib\raylib\src\raylib.h"
 #include <iostream>
 #include <cstdlib>
@@ -44,3 +47,5 @@ class Timer {
             return GetTime() - startTime;
         }
 };
+
+#endif
