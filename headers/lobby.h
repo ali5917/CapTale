@@ -122,25 +122,7 @@ class Lobby {
                 rooms[i]->drawRoom();
             }
             player->draw();
-            
-
-<<<<<<< HEAD
-                // text = "Press ENTERKEY to Enter City";
-                // textSize = MeasureTextEx(font, text.c_str(), 20, 0);
-                // DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 + 15}, fontSize, 0, {0, 71, 101, 255});
-
-            }
-
-            Rectangle menuRect = { (float)menuX, (float)menuY, (float)menuIcon.width, (float)menuIcon.height };
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                Vector2 mousePos = GetMousePosition();
-                if (CheckCollisionPointRec(mousePos, menuRect)) {
-                    // Event
-                }
-            }
-=======
             checkContains();
->>>>>>> 99e534d80f5bcab2329297a6c9afb59355205c27
         }
         
         bool CheckRectangleContainsRec(Rectangle outer, Rectangle inner) {
