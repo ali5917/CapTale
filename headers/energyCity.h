@@ -98,7 +98,7 @@ class EnergyCity {
         Item *items;
         Basket *basket;
         float spawnTimer = 0.0f;
-        int items = 0;
+        int currentItem = 0;
         float energyCount;
 
         Font font = LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0);
