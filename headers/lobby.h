@@ -3,6 +3,7 @@
 
 #include "C:\raylib\raylib\src\raylib.h"
 #include "settings.h"
+#include "headers\message.h"
 #include <iostream>
 using namespace std;
 
@@ -55,10 +56,12 @@ class Lobby {
         string roomName[8] = {
             "EMPTY", "CUSTOMIZE", "PONG", "WITHDRAW", "CAR GAME", "SPACESHOOTER", "EARN", "EAT"
         };
+            
+        MessageManager* messages;
+        bool energyWarning = false;
         Font font = LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0);
-    
     public:
-        Lobby (Cap* p) : player(p){
+        Lobby (Cap* p, MessageManager* m) : player(p), messages(m) {
             background = LoadTexture("assets/lobby/background.png");
 
             for (int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
@@ -97,27 +100,24 @@ class Lobby {
             Vector2 textSize = MeasureTextEx(font, text.c_str(), TOKEN_FONT_SIZE, 0);
             DrawTextEx(font, (text).c_str(), {WINDOW_WIDTH/2 - textSize.x/2, 100 - textSize.y/2}, TOKEN_FONT_SIZE, 0, TEXT_COLOR);
 
-            string text2 = "Consumable Energy: " + to_string(player->getEnergy()) + "%";
-            Vector2 text2Size = MeasureTextEx(font, text2.c_str(), TOKEN_FONT_SIZE, 0);
-            DrawTextEx(font, (text2).c_str(), {WINDOW_WIDTH/2 - text2Size.x/2, 120 + textSize.y - text2Size.y/2}, TOKEN_FONT_SIZE, 0, TEXT_COLOR);
+            float barWidth = 300;
+            float barHeight = 25;
+            float energyPercent = player->getEnergy() / 100.0f;
+            float x = WINDOW_WIDTH / 2 - barWidth / 2;
+            float y = 120 + textSize.y + 10;
+            string label = "Consumable Energy";
+            Vector2 labelSize = MeasureTextEx(font, label.c_str(), TOKEN_FONT_SIZE/1.5, 0);
+            DrawTextEx(font, label.c_str(), {WINDOW_WIDTH / 2 - labelSize.x / 2, y - TOKEN_FONT_SIZE/2 - 10}, TOKEN_FONT_SIZE/1.5, 0, Color{0x00, 0x47, 0x65, 255});
+            DrawRectangleRounded({x, y, barWidth, barHeight}, 0.5f, 10, Color{200, 220, 230, 255}); 
+            DrawRectangleRounded({x, y, barWidth * energyPercent, barHeight}, 0.5f, 10, Color{0x00, 0x47, 0x65, 255});
 
             for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
                 rooms[i]->drawRoom();
             }
             player->draw();
-            if(checkContains()) {
-                // int fontSize = 30;
-                // Font font = LoadFontEx("assets/fonts/Oswald-Bold.ttf", fontSize, NULL, 0);
-                
-                // string text = "Current City: " + roomName[currentState];
-                // Vector2 textSize = MeasureTextEx(font, text.c_str(), 20, 0);
-                // DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 - 15}, fontSize, 0, {0, 71, 101, 255});
+            
 
-                // text = "Press ENTERKEY to Enter City";
-                // textSize = MeasureTextEx(font, text.c_str(), 20, 0);
-                // DrawTextEx(font, text.c_str(), {(WINDOW_WIDTH/LOBBY_COLS)/2 - textSize.x/2, WINDOW_HEIGHT/2 - textSize.y/2 + 15}, fontSize, 0, {0, 71, 101, 255});
-
-            }
+            checkContains();
         }
         
         bool CheckRectangleContainsRec(Rectangle outer, Rectangle inner) {
@@ -128,8 +128,6 @@ class Lobby {
             Rectangle playerRec = player->getRectangle();
             for(int i = 0; i < LOBBY_ROWS * LOBBY_COLS; i++) {
                 if (rooms[i]->gameState != EMPTY &&CheckRectangleContainsRec(rooms[i]->getRec(), playerRec)) {
-
-                    
                     currentState = rooms[i]->gameState;
                     return true;
                 }
@@ -141,8 +139,11 @@ class Lobby {
         int update() {
             float dt = GetFrameTime();
             player->update(dt);
+            if(player->getEnergy() < 20 && !energyWarning) {
+                messages->addMessage("You're low on energy! Eat some fruit.");
+                energyWarning = true;
+            }
             if(currentState != EMPTY && IsKeyPressed(KEY_ENTER)) {
-
                 bool changeState = true;
                 switch (currentState) {
                     case SPACESHOOTER:
@@ -150,6 +151,7 @@ class Lobby {
                             player->removeTokens(SPACESHOOTER_TOKENS);
                         } else {
                             changeState = false;
+                            messages->addMessage("You need atleast " + to_string(SPACESHOOTER_TOKENS) + " tokens to enter Space City!");
                         }
                         break;
                     case PONG:
@@ -157,6 +159,7 @@ class Lobby {
                             player->removeTokens(PONG_TOKENS);
                         } else {
                             changeState = false;
+                            messages->addMessage("You need atleast " + to_string(PONG_TOKENS) + " tokens to enter Pong City!");
                         }
                         break;
                     case CAR:
@@ -164,7 +167,11 @@ class Lobby {
                             player->removeTokens(CAR_TOKENS);
                         } else {
                             changeState = false;
+                            messages->addMessage("You need atleast " + to_string(CAR_TOKENS) + " tokens to enter Car City!");
                         }
+                        break;
+                    case EAT:
+                        energyWarning = false;
                         break;
                     default:
                         break;
