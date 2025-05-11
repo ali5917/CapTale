@@ -67,7 +67,8 @@ class CapTaleSystem {
             gameOver = LoadTexture("assets/gameOver/game-over.png");
             bool success = loadData();
             if(success) {
-                state = LOBBY;
+                // state = LOBBY;
+                state = ENERGY_CITY;
             } else {
                 state = CUSTOM_CITY;
             }
