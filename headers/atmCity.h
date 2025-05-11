@@ -3,10 +3,12 @@
 
 #include "C:\raylib\raylib\src\raylib.h"
 #include "settings.h"
+#include "message.h"
 
 class ATMCity {
     private:
         Cap* player;
+        MessageManager* messages;
     public:
         enum ATMState {
             MACHINE,
@@ -20,7 +22,7 @@ class ATMCity {
 
         ATMState atmState;
 
-        ATMCity (Cap* p) : player(p), atmState(MACHINE) {
+        ATMCity (Cap* p, MessageManager* m) : player(p), messages(m), atmState(MACHINE) {
 
             // Loading Textures
             machine = LoadTexture("assets/atmCity/machine.png");        
@@ -68,6 +70,9 @@ class ATMCity {
 
             if (atmState == WITHDRAW){
                 player->tokens += (player->cash / 50);
+                if(player->cash > 0) {
+                    messages->addMessage("Converted $" + to_string(player->cash) + " cash to " + to_string(player->cash / 50) + " tokens.");
+                }
                 player->cash = 0;
 
                 if (IsKeyPressed(KEY_R)) {

@@ -28,9 +28,11 @@ class Cap {
         int cash;
         int energy;
         bool gameOver;
-        
+        int stepsMoved = 0;
+        const int stepsPerDrain = 25;
+        const int energyPerDrain = 1;
     public:
-        Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false), tokens(0), cash(INITIAL_CASH), energy(100), gameOver(false) {
+        Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false), tokens(0), cash(INITIAL_CASH), energy(75), gameOver(false) {
             collisionRadius = size.y/2;
         }
 
@@ -51,13 +53,24 @@ class Cap {
         ~Cap() {}
 
         void move(double dt) {
-            if (energy > MIN_ENERGY){
-                pos.x += direction.x * speed * dt;
-                pos.y += direction.y * speed * dt;
-            } else {
+            if (energy <= MIN_ENERGY) {
                 gameOver = true;
-            };
+                return;
+            }
+        
+            Vector2 prevPos = pos;
+        
+            pos.x += direction.x * speed * dt;
+            pos.y += direction.y * speed * dt;
+            if ((int)pos.x != (int)prevPos.x || (int)pos.y != (int)prevPos.y) {
+                stepsMoved++;
+                if (stepsMoved >= stepsPerDrain) {
+                    decreaseEnergy(energyPerDrain);
+                    stepsMoved = 0;
+                }
+            }
         }
+        
 
         void update(double dt) {
             input();
