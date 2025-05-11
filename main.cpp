@@ -64,6 +64,8 @@ class CapTaleSystem {
         Texture2D gameOver;
         Texture2D gameManual;
         bool enterPong;
+        Music bgMusic;
+
     public:
         CapTaleSystem (Texture2D bgTex) : player(new Cap()), messagesFont(LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0)), messages(messagesFont), atmCity(player, &messages), lobby(player, &messages), earnCity(player), energyCity(player), enterPong(false) {
             gameOver = LoadTexture("assets/gameOver/game-over.png");
@@ -73,6 +75,18 @@ class CapTaleSystem {
                 state = LOBBY;
             } else {
                 state = CUSTOM_CITY;
+            }
+            InitAudioDevice();
+            if (!IsAudioDeviceReady()) {
+                TraceLog(LOG_WARNING, "Audio device not ready - continuing without audio");
+            } else {
+                bgMusic = LoadMusicStream("assets/bg-music.mp3");
+                if (bgMusic.frameCount == 0) {
+                    TraceLog(LOG_WARNING, "Failed to load music file");
+                } else {
+                    PlayMusicStream(bgMusic);
+                    SetMusicVolume(bgMusic, 0.5f);
+                }
             }
         }
 
@@ -148,6 +162,9 @@ class CapTaleSystem {
             CloseWindow();
             saveData();
             UnloadTexture(gameOver);
+            UnloadTexture(gameManual);
+            UnloadMusicStream(bgMusic);
+            CloseAudioDevice();
         }
 
         void runGame () {
@@ -158,6 +175,7 @@ class CapTaleSystem {
         }
 
         void update() {
+            UpdateMusicStream(bgMusic);
             if (state == CUSTOM_CITY) {
                 if (IsKeyPressed(KEY_RIGHT)) customCity.nextCap();
                 if (IsKeyPressed(KEY_LEFT)) customCity.prevCap();
