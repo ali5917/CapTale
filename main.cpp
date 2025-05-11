@@ -1,7 +1,6 @@
 #include <iostream>
 #include "C:\raylib\raylib\src\raylib.h"
 #include <fstream>
-
 #include "headers\customCity.h"
 #include "headers\lobby.h"
 #include "headers\pongCity.h"
@@ -11,6 +10,28 @@
 #include "headers\earningCity.h"
 #include "headers\energyCity.h"
 using namespace std;
+
+class FileException : public exception {
+    private:
+        string fileName;
+    public:
+        FileException(string f) :fileName(f) {}
+        const char* what() const noexcept override {
+            string message = "FileException: Couldn't open file " + fileName;
+            return message.c_str();
+        }
+};
+
+class DataNotFoundException : public exception {
+    private:
+        string missingData;
+    public:
+        DataNotFoundException(string m) : missingData(m) {}
+        const char* what() const noexcept override {
+            string message = "DataNotFoundException: Complete data not found: " + missingData;
+            return message.c_str();
+        }
+};
 
 class CapTaleSystem {
     public:
@@ -28,6 +49,7 @@ class CapTaleSystem {
     
     private:
         CapTaleState state;
+        Cap* player;
         Font messagesFont;
         MessageManager messages;
         CustomCity customCity;
@@ -38,16 +60,90 @@ class CapTaleSystem {
         SpaceShooter spaceShooter;
         EarnCity earnCity;
         EnergyCity energyCity;
-        Cap player = Cap();
         bool enterPong;
         Texture2D gameOver;
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), messagesFont(LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0)), messages(messagesFont), atmCity(&player, &messages), lobby(&player, &messages), earnCity(&player), energyCity(&player), enterPong(false) {
+        CapTaleSystem (Texture2D bgTex) : player(new Cap()), messagesFont(LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0)), messages(messagesFont), atmCity(player, &messages), lobby(player, &messages), earnCity(player), energyCity(player), enterPong(false) {
             gameOver = LoadTexture("assets/gameOver/game-over.png");
+            bool success = loadData();
+            if(success) {
+                state = LOBBY;
+            } else {
+                state = CUSTOM_CITY;
+            }
+        }
+
+        bool loadData() {
+            ifstream inFile;
+            bool loaded = false;
+            try {
+                inFile.open("characterData.txt", ios::in);
+                if(!inFile) {
+                    throw FileException("characterData.txt");
+                }
+                Vector2 pos;
+                string line;
+                // Pos X
+                if (!getline(inFile, line)) throw DataNotFoundException("Missing pos.x");
+                pos.x = stof(line);
+                // Pos Y
+                if (!getline(inFile, line)) throw DataNotFoundException("Missing pos.y");
+                pos.y = stof(line);
+                // Cash
+                if (!getline(inFile, line)) throw DataNotFoundException("Missing cash");
+                int cash = stoi(line);
+                // Tokens
+                if (!getline(inFile, line)) throw DataNotFoundException("Missing tokens");
+                int tokens = stoi(line);
+                // Energy
+                if (!getline(inFile, line)) throw DataNotFoundException("Missing energy");
+                int energy = stoi(line);
+                // selectedCap
+                if (!getline(inFile, line)) throw DataNotFoundException("Missing selectedCap");
+                int selectedCap = stoi(line);
+                Texture lobbyCapTex = LoadTexture(("assets/lobby/" + to_string(selectedCap) + ".png").c_str());
+                player->setTexture(lobbyCapTex);
+                player->setSize({(float)lobbyCapTex.width, (float)lobbyCapTex.height});
+                player->setPosition(pos);
+                player->addCash(cash - INITIAL_CASH);
+                player->addTokens(tokens);
+                player->increaseEnergy(energy - player->getEnergy());
+                loaded = true;
+            } catch (FileException& obj) {
+                cout << obj.what();
+            } catch (DataNotFoundException& obj) {
+                cout << obj.what();
+            }
+            inFile.close();
+            return loaded;
+        }
+
+        void saveData() {
+            ofstream writeFile;
+            try {
+                writeFile.open("characterData.txt", ios::out);
+                if(!writeFile) {
+                    throw FileException("characterData.txt");
+                }
+                if(!player->getGameOver()) {
+                    writeFile << player->getPos().x << endl;
+                    writeFile << player->getPos().y << endl;
+                    writeFile << player->getCash() << endl;
+                    writeFile << player->getTokens() << endl;
+                    writeFile << player->getEnergy() << endl;
+                    writeFile << customCity.getSelectedCap() << endl;
+                }
+
+            } catch (FileException& obj) {
+                cout << obj.what();
+                cout << "Couldn't save data :(" << endl;
+            }
+            writeFile.close();
         }
 
         ~CapTaleSystem () {
             CloseWindow();
+            saveData();
             UnloadTexture(gameOver);
         }
 
@@ -64,15 +160,15 @@ class CapTaleSystem {
                 if (IsKeyPressed(KEY_LEFT)) customCity.prevCap();
                 if (IsKeyPressed(KEY_ENTER)) {
                     Texture lobbyCapTex = LoadTexture(("assets/lobby/" + to_string(customCity.getSelectedCap()) + ".png").c_str());
-                    player.setTexture(lobbyCapTex);
-                    player.setPosition({WINDOW_WIDTH/2.0f - lobbyCapTex.width/2.0f, WINDOW_HEIGHT - lobbyCapTex.height - 20.0f});
-                    player.setSize({(float)lobbyCapTex.width, (float)lobbyCapTex.height});
+                    player->setTexture(lobbyCapTex);
+                    player->setPosition({WINDOW_WIDTH/2.0f - lobbyCapTex.width/2.0f, WINDOW_HEIGHT - lobbyCapTex.height - 20.0f});
+                    player->setSize({(float)lobbyCapTex.width, (float)lobbyCapTex.height});
                     state = LOBBY;
                 }
             } else if (state == LOBBY) {
                 state = (CapTaleState)lobby.update();
 
-                if (player.getGameOver()) {
+                if (player->getGameOver()) {
                     state = GAME_OVER;
                 }
 
