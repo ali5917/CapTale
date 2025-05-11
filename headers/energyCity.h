@@ -11,13 +11,15 @@ class Item {
         Texture2D itemTexture;
         float speed;
         bool active = false;
+        string type;
     
     public:
         Item () {};
 
-        void initialize (const char* path, float s) {
+        void initialize (const char* path, float s, string t) {
             speed = s;
             itemTexture = LoadTexture(path);
+            type = t;
         }
 
         void update () {
@@ -45,14 +47,13 @@ class Item {
             return active;
         }
 
-        bool checkCollision (Rectangle basketRect) {
+        bool checkCollision(Rectangle basketRect) {
             Rectangle itemRect = { position.x, position.y, (float)itemTexture.width, (float)itemTexture.height };
-            bool horizontallyAligned = itemRect.x + itemRect.width > basketRect.x &&
-                               itemRect.x < basketRect.x + basketRect.width;
-            bool verticallyTouching = itemRect.y + itemRect.height >= basketRect.y &&
-                                    itemRect.y + itemRect.height <= basketRect.y + 1;
+            return CheckCollisionRecs(itemRect, basketRect);  // Use Raylib's built-in collision check
+        }
 
-            return horizontallyAligned && verticallyTouching;
+        string getType () {
+            return type;
         }
 };
 
@@ -94,7 +95,7 @@ class EnergyCity {
     private:
         Cap *player;
         Texture2D background;
-        int numItems = 6;
+        int numItems = 2;
         Item *items;
         Basket *basket;
         float spawnTimer = 0.0f;
@@ -108,10 +109,12 @@ class EnergyCity {
             background = LoadTexture("assets/energyCity/bg1.png");
 
             items = new Item [numItems];
-            for (int i = 0; i < numItems; i++) {
-                string path = "assets/energyCity/item" + to_string(i+1) +  ".png";
-                items[i].initialize(path.c_str(), 5.0f);
-            }
+            // for (int i = 0; i < numItems - 1; i++) {
+            //     string path = "assets/energyCity/item" + to_string(i+1) +  ".png";
+            //     items[i].initialize(path.c_str(), 5.0f, "fruit");
+            // }
+            items[numItems - 2].initialize("assets/energyCity/item1.png", 5.0f, "fruit");
+            items[numItems - 1].initialize("assets/energyCity/cap.png", 5.0f, "cap");
 
             basket = new Basket("assets/energyCity/basket.png", {600.0f, GetScreenHeight() - 154.0f - 10.0f}, 10.0f);
         }    
@@ -160,7 +163,11 @@ class EnergyCity {
             for (int i = 0; i < numItems; i++) {
                 if (items[i].checkCollision(basket->getRect())) {
                     items[i].spawn();
-                    player->increaseEnergy(2);
+                    if (items[i].getType() == "fruit") {
+                        player->increaseEnergy(2); 
+                    } else {
+                        player->increaseEnergy(10); 
+                    }
                 }
                 items[i].update();
             }
