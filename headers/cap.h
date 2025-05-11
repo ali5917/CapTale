@@ -23,18 +23,17 @@ class Cap {
         Vector2 direction;
         Vector2 size;
         bool discard;
-        float collisionRadius;
         int tokens;
         int cash;
         int energy;
         bool gameOver;
+        float collisionRadius;
         int stepsMoved = 0;
         const int stepsPerDrain = 25;
         const int energyPerDrain = 1;
     public:
-        Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false), tokens(0), cash(INITIAL_CASH), energy(75), gameOver(false) {
-            collisionRadius = size.y/2;
-        }
+
+        Cap(Vector2 p={0,0}, int s=CAP_SPEED, Vector2 d={0,0}, Texture t=LoadTexture("assets/customCity/cap0.png")) : texture(t), pos(p), speed(s), direction(d), size({(float)t.width, (float)t.height}), discard(false), tokens(0), cash(INITIAL_CASH), energy(75), gameOver(false), collisionRadius(size.y/2) {}
 
         void input() {
             direction.x = int(IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) - int(IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
