@@ -20,7 +20,7 @@ class CapTaleSystem {
             PONG_CITY,
             ATM_CITY,
             CAR_CITY,
-            SHOOTER_CITY,
+            SPACE_CITY,
             EARN_CITY,
             ENERGY_CITY,
             GAME_OVER
@@ -28,6 +28,8 @@ class CapTaleSystem {
     
     private:
         CapTaleState state;
+        Font messagesFont;
+        MessageManager messages;
         CustomCity customCity;
         PongCity pongCity;
         CarCity carCity;
@@ -37,12 +39,10 @@ class CapTaleSystem {
         EarnCity earnCity;
         EnergyCity energyCity;
         Cap player = Cap();
-
         bool enterPong;
         Texture2D gameOver;
-
     public:
-        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), atmCity(&player), lobby(&player), earnCity(&player), energyCity(&player), enterPong(false) {
+        CapTaleSystem (Texture2D bgTex) : state(CUSTOM_CITY), messagesFont(LoadFontEx("assets/fonts/Montserrat-SemiBold.ttf", TOKEN_FONT_SIZE, NULL, 0)), messages(messagesFont), atmCity(&player, &messages), lobby(&player, &messages), earnCity(&player), energyCity(&player), enterPong(false) {
             gameOver = LoadTexture("assets/gameOver/game-over.png");
         }
 
@@ -71,11 +71,7 @@ class CapTaleSystem {
                 }
             } else if (state == LOBBY) {
                 state = (CapTaleState)lobby.update();
-                // Energy drainage
-                if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_UP)) {
-                    player.decreaseEnergy(2);
-                }
-                
+
                 if (player.getGameOver()) {
                     state = GAME_OVER;
                 }
@@ -106,7 +102,7 @@ class CapTaleSystem {
                 }
                 atmCity.update();
                
-            } else if (state == SHOOTER_CITY) {
+            } else if (state == SPACE_CITY) {
                 if (IsKeyPressed(KEY_L)) {
                     spaceShooter.restart();
                     state = LOBBY;
@@ -128,6 +124,7 @@ class CapTaleSystem {
                 }
                 energyCity.update();
             }
+            messages.update();
         }
 
         void draw () {
@@ -144,7 +141,7 @@ class CapTaleSystem {
                 carCity.draw();
             } else if (state == ATM_CITY) {
                 atmCity.draw();
-            } else if (state == SHOOTER_CITY) {
+            } else if (state == SPACE_CITY) {
                 spaceShooter.draw();
             } else if (state == EARN_CITY) {
                 earnCity.draw();
@@ -153,6 +150,7 @@ class CapTaleSystem {
             } else if (state == GAME_OVER) {
                 DrawTexture(gameOver, 0, 0, WHITE);
             }
+            messages.draw();
             EndDrawing();
 
         }    
