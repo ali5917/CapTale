@@ -2,11 +2,9 @@
 
 **Group Members**
 
-- Ismail Silat — 24K-0546 (Leader)  
-- Ali Kashif — 24K-0802  
-- Hammad Abdul Rahim — 24K-0581
-
-**Submission Date**: 11th May, 2025
+- [Ismail Silat — 24K-0546 (Leader)](https://github.com/ismailsilat7)  
+- [Ali Kashif — 24K-0802](https://github.com/ali5917)  
+- [Hammad Abdul Rahim — 24K-0581](https://github.com/hammadrahim-06)
 
 ## **Table of Contents**
 
@@ -92,9 +90,9 @@ The development followed an agile, iterative approach. Each city and core system
 
 ### Roles and Responsibilities
 
-- **Ismail Silat:** Shooter City, Earning City, Energy City, ATM logic, Lobby mechanics, UI messaging, Character save/load  
-- **Ali Kashif:** Game structure, Pong City, ATM City, Custom City, fruit logic, pause mechanics, Info section  
-- **Hammad Abdul Rahim:** Car City, token system logic, UI design and screen layouts
+- **[Ismail Silat](https://github.com/ismailsilat7) :** Shooter City, Earning City, Energy City, ATM logic, Lobby mechanics, UI messaging, Character save/load  
+- **[Ali Kashif](https://github.com/ali5917) :** Game structure, Pong City, ATM City, Custom City, fruit logic, pause mechanics, Info section  
+- **[Hammad Abdul Rahim](https://github.com/hammadrahim-06) :** Car City, token system logic, UI design and screen layouts
 
 
 ## **Project Implementation**
@@ -145,38 +143,53 @@ The development followed an agile, iterative approach. Each city and core system
 ![Lobby](assets/screenshots/image7.png)
 
 ### Custom City  
+- Cap customization interface
+- Color/character options preview
 ![Custom](assets/screenshots/image19.png)
 
 ### Pong City  
+- Pong gameplay for Karachi, New York, and Rome difficulty levels
+- Pause screen functionality
 ![Pong1](assets/screenshots/image15.png)  
 ![Pong2](assets/screenshots/image4.png)  
 ![Pong3](assets/screenshots/image12.png)  
 ![Pong4](assets/screenshots/image14.png)
 
 ### Shooter City  
+- Space shooter interface
+- Shooting mechanics and enemy sprites
 ![Shooter1](assets/screenshots/image8.png)  
 ![Shooter2](assets/screenshots/image2.png)  
 ![Shooter3](assets/screenshots/image10.png)
 
 ### Car City  
+- Coin collection and obstacle avoidance
+- Speed changes, power ups and game-over screen
 ![Car1](assets/screenshots/image6.png)  
 ![Car2](assets/screenshots/image17.png)  
 ![Car3](assets/screenshots/image1.png)
 
 ### Energy City  
+- Fruit-catching gameplay
+- Energy refill animation and bar update
 ![Energy](assets/screenshots/image16.png)
 
 ### Earning City  
+- Math question prompt UI
+- Correct/Incorrect feedback and reward screen
 ![Earning1](assets/screenshots/image18.png)  
 ![Earning2](assets/screenshots/image20.png)  
 ![Earning3](assets/screenshots/image3.png)
 
 ### ATM City  
+- Token/cash transaction interface
+- UI messages for success/failure
 ![ATM1](assets/screenshots/image11.png)  
 ![ATM2](assets/screenshots/image9.png)  
 ![ATM3](assets/screenshots/image13.png)
 
 ### Game Over  
+- Screen after cap dies
 ![Game Over](assets/screenshots/image5.png)
 
 ## **Testing and Validation**
