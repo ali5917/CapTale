@@ -140,7 +140,7 @@ class Lobby {
             float dt = GetFrameTime();
             player->update(dt);
             if(player->getEnergy() < 20 && !energyWarning) {
-                messages->addMessage("You're low on energy! Eat some fruit.");
+                messages->addMessage("You're low on energy! Eat some fruits.");
                 energyWarning = true;
             }
 
