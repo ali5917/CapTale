@@ -171,6 +171,7 @@ The development followed an agile, iterative approach. Each city and core system
 
 ### Energy City  
 - Fruit-catching gameplay
+- Catch cap to get an energy boost
 - Energy refill animation and bar update
 ![Energy](assets/screenshots/image16.jpg)
 
