@@ -16,11 +16,6 @@ class Question {
         int cashReward;
         int penalty;
     public:
-        // Question() : question(""), correctOption(0), cashReward(0), penalty(0) {
-        //     for (int i = 0; i < 4; i++) {
-        //         options[i] = "";
-        //     }
-        // }
 
         Question(string q, string opts[4], int cO, int cR, int p) : question(q), correctOption(cO), cashReward(cR), penalty(p) {
             for (int i = 0; i < 4; i++) {
