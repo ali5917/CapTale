@@ -172,7 +172,7 @@ The development followed an agile, iterative approach. Each city and core system
 ### Energy City  
 - Fruit-catching gameplay
 - Energy refill animation and bar update
-![Energy](assets/screenshots/image16.png)
+![Energy](assets/screenshots/image16.jpg)
 
 ### Earning City  
 - Math question prompt UI
