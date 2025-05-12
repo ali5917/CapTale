@@ -102,6 +102,7 @@ class CapTaleSystem {
                 // Energy
                 if (!getline(inFile, line)) throw DataNotFoundException("Missing energy");
                 int energy = stoi(line);
+                if (energy == 0) energy = 20;
                 // selectedCap
                 if (!getline(inFile, line)) throw DataNotFoundException("Missing selectedCap");
                 int selectedCap = stoi(line);
@@ -129,14 +130,14 @@ class CapTaleSystem {
                 if(!writeFile) {
                     throw FileException("characterData.txt");
                 }
-                if(!player->getGameOver()) {
+                // if(!player->getGameOver()) {
                     writeFile << player->getPos().x << endl;
                     writeFile << player->getPos().y << endl;
                     writeFile << player->getCash() << endl;
                     writeFile << player->getTokens() << endl;
                     writeFile << player->getEnergy() << endl;
                     writeFile << customCity.getSelectedCap() << endl;
-                }
+                // }
 
             } catch (FileException& obj) {
                 cout << obj.what();
