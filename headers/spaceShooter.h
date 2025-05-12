@@ -530,61 +530,18 @@ class SpaceShooter {
 
         // GAME BEGIN
         bool run() {
-            while(!WindowShouldClose() && !selected) {
-                draw();
+            while (!WindowShouldClose()) {
+                if (!selected) {
+                    draw();
+                }
+                else if (!gameOver) {
+                    update();
+                    draw();
+                }
+                else {
+                    draw();
+                }
             }
-            while(!WindowShouldClose() && !gameOver) {
-                update();
-                draw();
-            }
-            // END GAME WITHOUT RESTART LOGIC
-            while (!WindowShouldClose() && gameOver) {
-                draw();
-            }
-            // END GAME WITH RESTART LOGIC
-            // bool restart = false;
-            // while(!WindowShouldClose() && gameOver) {
-            //     BeginDrawing();
-            //     ClearBackground(BG_COLOR);
-            //     drawStars();
-            //     drawStars();
-            //     drawStars();
-            //     char overtext[50] = "Game Over!";
-            //     Vector2 overtextSize = MeasureTextEx(font, overtext, FONT_SIZE, 0);
-            //     DrawTextEx(font, overtext, {WINDOW_WIDTH/2 - overtextSize.x / 2, WINDOW_HEIGHT/2 - overtextSize.y / 2 - 100}, FONT_SIZE, 0, WHITE);
-            //     sprintf(overtext, "Shots on target: %d/%d", score, lasersUsed);
-            //     overtextSize = MeasureTextEx(font, overtext, FONT_SIZE/2, 0);
-            //     DrawTextEx(font, overtext, {WINDOW_WIDTH/2 - overtextSize.x / 2,WINDOW_HEIGHT/2 - overtextSize.y / 2}, FONT_SIZE/2, 0, WHITE);
-            //     sprintf(overtext, "Press R to restart!");
-            //     overtextSize = MeasureTextEx(font, overtext, FONT_SIZE/1.5, 0);
-            //     DrawTextEx(font, overtext, {WINDOW_WIDTH/2 - overtextSize.x / 2,WINDOW_HEIGHT/2 - overtextSize.y / 2 + 100}, FONT_SIZE/1.5, 0, WHITE);
-            //     if(IsKeyPressed(KEY_R)) {
-            //         gameOver = false;
-            //         restart = true;
-            //     }
-            //     EndDrawing();
-            // }
-            // if (restart) {
-                // for(int i = 0; i < numLasers; i++) {
-                //     lasers[i]->updateDiscardStatus(true);
-                // }
-                // for(int i = 0; i < numMeteors; i++) {
-                //     meteors[i]->updateDiscardStatus(true);
-                // }
-                // for(int i = 0; i < numPowerUps; i++) {
-                //     powerUps[i]->updateDiscardStatus(true);
-                // }
-                // score = 0;
-                // lasersUsed = 0;
-                // numMeteors = 0;
-                // numLasers = 0;
-                // numPowerUps = 0;
-                // player->disablePowerUps();
-                // if(selectedGameMode == HUNDREDSECONDS) {
-                //     overTimer = Timer(MAX_TIME, false, true, [this]() {updateGameOver();});
-            //     }
-            //     return restart;
-            // }
             CloseAudioDevice();
             return false;
         }
